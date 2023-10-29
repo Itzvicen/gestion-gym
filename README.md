@@ -1,5 +1,4 @@
 # Sistema de Gestión de Miembros de Gimnasio 🏋️‍♀️
-### Desarrollador: Vicente Santiago Perea
 
 ## Descripción del Proyecto
 El Sistema de Gestión de Miembros de Gimnasio es una aplicación que permite administrar los miembros de un gimnasio de forma sencilla y eficiente. Con esta aplicación, puedes ver la lista de todos los miembros del gimnasio, agregar nuevos miembros con su información personal, editar la información de los miembros existentes, eliminar miembros del gimnasio, y cargar y mostrar imágenes de perfil para cada miembro.
@@ -11,3 +10,5 @@ Además de las funcionalidades mencionadas anteriormente, el Sistema de Gestión
 - Backend: PHP 8.2
 - Base de datos: MySQL
 - Comunicación: API RESTful
+
+### 👨🏼‍💻Desarrollador: Vicente Santiago Perea
