@@ -1,0 +1,35 @@
+<div class="overflow-x-auto w-full border rounded-md mb-6 shadow">
+	<table class="min-w-full text-center divide-y divide-gray-200 p-3 bg-white text-sm">
+		<thead>
+			<tr>
+				<th class="whitespace-nowrap px-4 py-4 font-medium text-gray-900">ID</th>
+				<th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">ID del miembro</th>
+				<th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Total</th>
+				<th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Fecha de pago</th>
+				<th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Método de pago</th>
+				<th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Estado</th>
+				<th class="px-4 py-2">Ver pago</th>
+			</tr>
+		</thead>
+		<tbody class="divide-y divide-gray-200">
+			{% for payment in payments %}
+				<tr>
+					<td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">{{ payment.id }}</td>
+          <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ payment.first_name }} {{ payment.last_name }}</td>
+					<td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ payment.amount }}
+						€</td>
+					<td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ payment.payment_date|date('d/m/Y') }}</td>
+					<td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ payment.payment_method }}</td>
+					<td class="whitespace-nowrap px-4 py-2 text-gray-700">
+						<p class="font-medium w-fit m-auto px-3 text-sm rounded-3xl text-center {{ payment.payment_status == 'Pagado' ? 'bg-green-200 text-green-500' : 'bg-red-200 text-red-500' }}">
+							{{ payment.payment_status }}
+						</p>
+					</td>
+					<td class="whitespace-nowrap px-4 py-2">
+						<a href="#" class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700">Ver</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
