@@ -6,9 +6,7 @@ El Sistema de Gestión de Miembros de Gimnasio es una aplicación que permite ad
 Además de las funcionalidades mencionadas anteriormente, el Sistema de Gestión de Miembros de Gimnasio también permitirá consultar los diferentes pagos mensuales de cada miembro, brindando un registro detallado de los pagos realizados, los métodos de pago utilizados y el estado de los pagos.
 
 ## Tecnologías a utilizar
-- Frontend: React.js, Tailwind CSS
-- Backend: PHP 8.2
+- Lenguajes: PHP, Twig
 - Base de datos: MySQL
-- Comunicación: API RESTful
-
+  
 ### 👨🏼‍💻Desarrollador: Vicente Santiago Perea
