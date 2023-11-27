@@ -21,6 +21,7 @@ class DashboardController
     }
 
     $username = $_SESSION['username'];
+    $currentUrl = $_SERVER['REQUEST_URI'];
 
     // Obtener las 2 primeras letras del nombre de usuario
     $avatar_fallback = substr($username, 0, 2);
@@ -44,6 +45,7 @@ class DashboardController
       'total_payments' => $total_payments,
       'unpaid_payments' => $unpaid_payments,
       'members' => $members,
+      'currentUrl' => $currentUrl
     ]);
   }
 }

@@ -4,7 +4,7 @@ class Database {
     private $pdo;
 
     private function __construct() {
-        $host = '192.168.18.8';
+        $host = '192.168.1.43';
         $user = 'root';
         $password = 'root';
         $database = 'gym_db';
