@@ -18,6 +18,7 @@ class PaymentController {
     }
 
     $currentUrl = $_SERVER['REQUEST_URI'];
+    
     // Obtener las 2 primeras letras del nombre de usuario
     $avatar_fallback = substr($username, 0, 2);
     $payments = Payment::getAllPayments($this->db);

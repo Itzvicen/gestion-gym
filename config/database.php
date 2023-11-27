@@ -10,6 +10,14 @@ class Database {
         $database = 'gym_db';
         $charset = 'utf8mb4';
 
+        /* Base de datos produccion
+        $host = 'localhost'
+        $user = 'vicentesantiago_gym';
+        $password = 'digbos-5razsi-zoCjum';
+        $database = 'vicentesantiago_gymdb';
+        $charset = 'utf8mb4';
+        */
+
         $dsn = "mysql:host=$host;dbname=$database;charset=$charset";
 
         try {

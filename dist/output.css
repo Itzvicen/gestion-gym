@@ -850,6 +850,10 @@ video {
   width: 1px;
 }
 
+.w-\[50\%\] {
+  width: 50%;
+}
+
 .min-w-full {
   min-width: 100%;
 }
@@ -1553,6 +1557,14 @@ video {
 
   .sm\:w-72 {
     width: 18rem;
+  }
+
+  .sm\:w-7 {
+    width: 1.75rem;
+  }
+
+  .sm\:w-80 {
+    width: 20rem;
   }
 
   .sm\:shrink-0 {

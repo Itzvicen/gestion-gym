@@ -36,6 +36,8 @@ class DashboardController
     // Obtener los pagos no pagados
     $unpaid_payments = Payment::getUnpaidPayments($this->db);
 
+    
+
 
     echo $this->twig->render('dashboard.twig', [
       'username' => $username,
