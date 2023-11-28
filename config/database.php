@@ -1,6 +1,6 @@
 <?php
 
-require_once '../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php'; // Ajusta la ruta según tu estructura de directorios
 
 use Dotenv\Dotenv;
 
