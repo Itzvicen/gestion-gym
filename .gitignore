@@ -1,3 +1,4 @@
 .devcontainer/
 vendor/
 node_modules/
+.env

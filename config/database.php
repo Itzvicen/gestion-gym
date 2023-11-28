@@ -1,16 +1,23 @@
 <?php
+
+require_once '../vendor/autoload.php';
+
+use Dotenv\Dotenv;
+
 class Database {
     private static $instance = null;
     private $pdo;
 
     private function __construct() {
+        $dotenv = Dotenv::createImmutable(__DIR__);
+        $dotenv->load();
+        
         /* Conexion BBDD */
-        $host = "eu-south-1.neatlycloud.es";
-        $user = 'vicentesantiago_gym';
-        $password = 'digbos-5razsi-zoCjum';
-        $database = 'vicentesantiago_gymdb';
-        $charset = 'utf8mb4';
-
+        $host = $_ENV['DB_HOST'];
+        $user = $_ENV['DB_USER'];
+        $password = $_ENV['DB_PASSWORD'];
+        $database = $_ENV['DB_DATABASE'];
+        $charset = $_ENV['DB_CHARSET'];
         $dsn = "mysql:host=$host;dbname=$database;charset=$charset";
 
         try {
