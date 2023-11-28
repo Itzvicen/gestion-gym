@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link href="../../dist/output.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="flex antialiased">
+    <div class="fixed z-20">
+      {% include 'components/sidebar.twig' %}
+    </div>
+    <div class="flex flex-col w-full ml-[65px]">
+      {% include 'components/header.twig' %}
+      {% include 'components/edit_account.twig' %}
+    </div>
+  </div>
+</body>
+
+</html>

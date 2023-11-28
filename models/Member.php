@@ -75,24 +75,16 @@ class Member
     $db = $db->getConnection();
     $stmt = $db->prepare('SELECT * FROM members');
     $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
 
-    $members = [];
-    foreach ($results as $row) {
-      $members[] = new Member(
-        $row['id'],
-        $row['first_name'],
-        $row['last_name'],
-        $row['email'],
-        $row['phone'],
-        $row['birth_date'],
-        $row['registration_date'],
-        $row['active'],
-        $row['image_path']
-      );
-    }
-
-    return $members;
+  // Método estático para buscar miembros por nombre
+  public static function searchByName($query, $db) {
+    $db = $db->getConnection();
+    $stmt = $db->prepare("SELECT * FROM members WHERE first_name LIKE :query OR last_name LIKE :query");
+    $stmt->bindValue(':query', '%' . $query . '%');
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
   // Metodo estatico para obtener miembros activos

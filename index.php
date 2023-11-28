@@ -15,6 +15,7 @@ require_once 'controllers/DashboardController.php';
 require_once 'controllers/MemberEditController.php';
 require_once 'controllers/PaymentController.php';
 require_once 'controllers/LogoutController.php';
+require_once 'controllers/AccountController.php';
 
 // Crear instancias de modelos
 $userModel = new User($pdo);
@@ -24,6 +25,7 @@ $loginController = new LoginController($twig, $pdo);
 $dashboardController = new DashboardController($twig, $userModel, $db); // Asegúrate de pasar los parámetros correctos
 $paymentController = new PaymentController($twig, $db);
 $memberEditController = new MemberEditController($twig, $db);
+$accountController = new AccountController($twig, $db);
 $logoutController = new LogoutController();
 
 // Enrutamiento
@@ -47,5 +49,11 @@ switch ($request) {
     break;
   case '/dashboard/payments':
     $paymentController->showPayments();
+    break;
+  case (preg_match("/^\/dashboard\/search/", $request) ? true : false):
+    $dashboardController->searchMembers();
+    break;
+  case '/account':
+    $accountController->editAccount();
     break;
 }

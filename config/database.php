@@ -4,19 +4,12 @@ class Database {
     private $pdo;
 
     private function __construct() {
-        $host = '192.168.1.43';
-        $user = 'root';
-        $password = 'root';
-        $database = 'gym_db';
-        $charset = 'utf8mb4';
-
-        /* Base de datos produccion
-        $host = 'localhost'
+        /* Conexion BBDD */
+        $host = "eu-south-1.neatlycloud.es";
         $user = 'vicentesantiago_gym';
         $password = 'digbos-5razsi-zoCjum';
         $database = 'vicentesantiago_gymdb';
         $charset = 'utf8mb4';
-        */
 
         $dsn = "mysql:host=$host;dbname=$database;charset=$charset";
 
