@@ -3,7 +3,7 @@
 class DashboardController
 {
   private $twig;
-  private $userModel; // Si tienes un modelo relacionado
+  private $userModel;
   private $db;
   
   public function __construct($twig, $userModel, $db) {
@@ -54,7 +54,7 @@ class DashboardController
 
     $username = $_SESSION['username'];
     $currentUrl = $_SERVER['REQUEST_URI'];
-    $searchQuery = $_GET['query'] ?? ''; // Obtiene la consulta de búsqueda desde la URL
+    $searchQuery = $_GET['query'] ?? '';
     $isSearching = !empty($_GET['query']);
 
     // Obtener las 2 primeras letras del nombre de usuario

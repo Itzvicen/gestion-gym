@@ -17,8 +17,8 @@ class AccountController
     $username = $_SESSION['username'];
     $avatar_fallback = substr($username, 0, 2);
     $currentUrl = $_SERVER['REQUEST_URI'];
-    $userId = $_SESSION['id']; // Asegúrate de tener el ID del usuario en sesión
-    $user = User::getUserById($userId, $this->db); // Asegúrate de tener el método getUserById() en la clase Database
+    $userId = $_SESSION['id'];
+    $user = User::getUserById($userId, $this->db); 
 
     echo $this->twig->render('account.twig', [
       'user' => $user,
@@ -33,8 +33,8 @@ class AccountController
     // Obtener información del usuario actual
     $username = $_SESSION['username'];
     $avatar_fallback = substr($username, 0, 2);
-    $userId = $_SESSION['id']; // Asegúrate de tener el ID del usuario en sesión
-    $user = User::getUserById($userId, $this->db); // Asegúrate de tener el método getUserById() en la clase Database
+    $userId = $_SESSION['id']; 
+    $user = User::getUserById($userId, $this->db);
 
     // Obtener información del formulario
     $first_name = $_POST['first_name'];

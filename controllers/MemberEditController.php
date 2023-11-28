@@ -71,7 +71,6 @@ class MemberEditController
 
   public function update($memberId)
   {
-    // Asegúrate de que haya datos POST
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       // Obtener datos del formulario
       // Manejar la carga de la imagen
