@@ -11,8 +11,7 @@ class MemberEditController
     $this->db = $db;
   }
 
-  public function edit($memberId)
-  {
+  public function edit($memberId) {
     if (!isset($_SESSION['username'])) {
       header('Location: /');
       exit;
@@ -69,25 +68,11 @@ class MemberEditController
     ]);
   }
 
-  public function update($memberId)
-  {
+  public function update($memberId) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       // Obtener datos del formulario
       // Manejar la carga de la imagen
-      $image = isset($_FILES['image']) ? $_FILES['image'] : null;
-      $imagePath = isset($_POST['image_path']) ? $_POST['image_path'] : '';
-
-      if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-        $targetDir = "uploads/pictures/";
-        $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
-        $newFileName = "perfil-" . $memberId . "." . $extension;
-        $imagePath = $targetDir . $newFileName;
-
-        // Mover el archivo subido al directorio de destino
-        move_uploaded_file($image['tmp_name'], $imagePath);
-      } else {
-        $imagePath = "uploads/pictures/default.png";
-      }
+      $imagePath = $this->handleImageUpload();
 
       $first_name = $_POST['first_name'];
       $last_name = $_POST['last_name'];
@@ -124,5 +109,37 @@ class MemberEditController
       // Redirigir o mostrar un mensaje de éxito
       header('Location: /dashboard/edit/' . $memberId);
     }
+  }
+
+  public function delete($memberId) {
+    $deleteCount = Member::deleteMember($memberId, $this->db);
+
+    if ($deleteCount === 0) {
+      $_SESSION['delete_error'] = 'Error al eliminar.';
+    } else {
+      $_SESSION['delete_success'] = 'Miembro eliminado con éxito.';
+    }
+
+    header('Location: /dashboard');
+  }
+
+  private function handleImageUpload()
+  {
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+      $image = $_FILES['image'];
+      $targetDir = "uploads/pictures/";
+      $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
+      $newFileName = uniqid() . '.' . $extension;
+      $imagePath = $targetDir . $newFileName;
+
+      if (!file_exists($targetDir)) {
+        mkdir($targetDir, 0777, true);
+      }
+
+      move_uploaded_file($image['tmp_name'], $imagePath);
+      return $imagePath;
+    }
+
+    return 'uploads/pictures/default.png';
   }
 }

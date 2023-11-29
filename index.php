@@ -13,6 +13,7 @@ require_once 'models/Payment.php';
 require_once 'controllers/LoginController.php';
 require_once 'controllers/DashboardController.php';
 require_once 'controllers/MemberEditController.php';
+require_once 'controllers/MemberCreateController.php';
 require_once 'controllers/PaymentController.php';
 require_once 'controllers/LogoutController.php';
 require_once 'controllers/AccountController.php';
@@ -25,6 +26,7 @@ $loginController = new LoginController($twig, $pdo);
 $dashboardController = new DashboardController($twig, $userModel, $db); // Asegúrate de pasar los parámetros correctos
 $paymentController = new PaymentController($twig, $db);
 $memberEditController = new MemberEditController($twig, $db);
+$memberCreateController = new MemberCreateController($twig, $db);
 $accountController = new AccountController($twig, $db);
 $logoutController = new LogoutController();
 
@@ -44,6 +46,12 @@ switch ($request) {
   case (preg_match("/^\/dashboard\/edit\/(\d+)$/", $request, $matches) ? true : false):
     $memberEditController->edit($matches[1]);
     break;
+  case '/dashboard/member/create':
+    $memberCreateController->createMember();
+    break;
+  case (preg_match("/^\/dashboard\/member\/(\d+)\/delete$/", $request, $matches) ? true : false):
+    $memberEditController->delete($matches[1]);
+    break;
   case (preg_match("/^\/dashboard\/member\/update\/(\d+)$/", $request, $matches) && $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false):
     $memberEditController->update($matches[1]);
     break;
@@ -55,5 +63,8 @@ switch ($request) {
     break;
   case '/account':
     $accountController->editAccount();
+    break;
+  case (preg_match("/^\/account\/update/", $request) && $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false):
+    $accountController->updateAccount();
     break;
 }

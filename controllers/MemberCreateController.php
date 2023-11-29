@@ -11,46 +11,56 @@ class MemberCreateController
     $this->db = $db;
   }
 
-  public function showCreateForm() {
-    echo $this->twig->render('create_member.twig'); 
-  }
-
   public function createMember() {
     // Comprobar si se ha enviado el formulario
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       // Recoger los datos del formulario
-      $firstName = $_POST['first_name'];
-      $lastName = $_POST['last_name'];
-      $email = $_POST['email'];
-      $phone = $_POST['phone'];
-      $registrationDate = $_POST['registration_date'];
-      $birthDate = $_POST['birth_date'];
-      $isActive = $_POST['active'];
-
+      $firstName = $_POST['first_name'] ?? '';
+      $lastName = $_POST['last_name'] ?? '';
+      $email = $_POST['email'] ?? '';
+      $phone = $_POST['phone'] ?? '';
+      $registrationDate = $_POST['registration_date'] ?? '';
+      $birthDate = $_POST['birth_date'] ?? '';
+      $isActive = $_POST['active'] ?? '0';
 
       // Si se ha subido una imagen, manejarla aquí
       $imagePath = $this->handleImageUpload();
 
-      // Insertar el nuevo miembro en la base de datos
-      $stmt = $this->db->prepare("INSERT INTO members (first_name, last_name, email, phone, registration_date, birth_date, active, image_path) VALUES (:first_name, :last_name, :email, :phone, :registration_date, :birth_date, :active, :image_path)");
-      $stmt->execute([
+      // Crear un nuevo miembro
+      $memberData = [
         'first_name' => $firstName,
         'last_name' => $lastName,
         'email' => $email,
         'phone' => $phone,
-        'registration_date' => $registrationDate,
         'birth_date' => $birthDate,
+        'registration_date' => $registrationDate,
         'active' => $isActive,
         'image_path' => $imagePath
-      ]);
+      ];
 
-      // Redireccionar al usuario, por ejemplo, a la página de lista de miembros
-      header('Location: /dashboard');
+      $memberId = Member::createMember($memberData, $this->db);
+
+      // Redirigir al usuario o mostrar un mensaje de éxito/error
+      header('Location: /dashboard/edit/' . $memberId);
     }
   }
 
   private function handleImageUpload() {
-    // Código para manejar la subida de imagen
-    return "imagen.jpg";
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+      $image = $_FILES['image'];
+      $targetDir = "uploads/pictures/";
+      $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
+      $newFileName = uniqid() . '.' . $extension;
+      $imagePath = $targetDir . $newFileName;
+
+      if (!file_exists($targetDir)) {
+        mkdir($targetDir, 0777, true);
+      }
+
+      move_uploaded_file($image['tmp_name'], $imagePath);
+      return $imagePath;
+    }
+
+    return 'uploads/pictures/default.png';
   }
 }

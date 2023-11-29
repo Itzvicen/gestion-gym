@@ -7,7 +7,9 @@
 		<title>Dashboard</title>
 		<link href="../../dist/output.css" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+		<script type="text/javascript" src="../../src/js/member.js"></script>
 	</head>
 
 	<body>
@@ -18,6 +20,7 @@
 			<div class="flex flex-col w-full ml-[65px]">
 				{% include 'components/header.twig' %}
 				{% include 'components/edit_form.twig' %}
+				{% include 'components/confirm_delete.twig' %}
 			</div>
 		</div>
 	</body>

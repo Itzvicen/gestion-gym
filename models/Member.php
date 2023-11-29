@@ -71,15 +71,65 @@ class Member
   }
 
   // Método estático para obtener todos los miembros
-  public static function getAllMembers($db) {
+  public static function getAllMembers($db)
+  {
     $db = $db->getConnection();
     $stmt = $db->prepare('SELECT * FROM members');
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  // Método estático para crear un nuevo miembro
+  public static function createMember($data, $db) {
+    $db = $db->getConnection();
+    $stmt = $db->prepare("INSERT INTO members (first_name, last_name, email, phone, birth_date, registration_date, active, image_path) VALUES (:first_name, :last_name, :email, :phone, :birth_date, :registration_date, :active, :image_path)");
+    $stmt->execute([
+      'first_name' => $data['first_name'],
+      'last_name' => $data['last_name'],
+      'email' => $data['email'],
+      'phone' => $data['phone'],
+      'birth_date' => $data['birth_date'],
+      'registration_date' => $data['registration_date'],
+      'active' => $data['active'],
+      'image_path' => $data['image_path']
+    ]);
+
+    return $db->lastInsertId(); // Retorna el ID del miembro creado
+  }
+
+  // Metodo  estatico para actualizar un miembro
+  public static function updateMember($id, $data, $db) {
+    $db = $db->getConnection();
+    $stmt = $db->prepare("UPDATE members SET first_name = :first_name, last_name = :last_name, email = :email, phone = :phone, birth_date = :birth_date, registration_date = :registration_date, active = :active, image_path = :image_path WHERE id = :id");
+    $stmt->execute([
+      'first_name' => $data['first_name'],
+      'last_name' => $data['last_name'],
+      'email' => $data['email'],
+      'phone' => $data['phone'],
+      'birth_date' => $data['birth_date'],
+      'registration_date' => $data['registration_date'],
+      'active' => $data['active'],
+      'image_path' => $data['image_path'],
+      'id' => $id
+    ]);
+
+    return $stmt->rowCount(); // Retorna el número de filas afectadas
+  }
+
+  // Metodo estatico para eliminar un miembro
+  public static function deleteMember($id, $db) {
+    $db = $db->getConnection();
+    $stmt = $db->prepare("DELETE FROM members WHERE id = :id");
+    $stmt->execute([
+      'id' => $id
+    ]);
+
+    return $stmt->rowCount(); // Retorna el número de filas afectadas
+  }
+
   // Método estático para buscar miembros por nombre
-  public static function searchByName($query, $db) {
+  public static function searchByName($query, $db)
+  {
     $db = $db->getConnection();
     $stmt = $db->prepare("SELECT * FROM members WHERE first_name LIKE :query OR last_name LIKE :query");
     $stmt->bindValue(':query', '%' . $query . '%');
@@ -88,7 +138,8 @@ class Member
   }
 
   // Metodo estatico para obtener miembros activos
-  public static function getActiveMembers($db) {
+  public static function getActiveMembers($db)
+  {
     $db = $db->getConnection();
     $stmt = $db->prepare("SELECT COUNT(*) FROM members WHERE active = 1");
     $stmt->execute();
@@ -98,7 +149,8 @@ class Member
   }
 
   // Metodo estatico para obtener miembros inactivos
-  public static function getInactiveMembers($db) {
+  public static function getInactiveMembers($db)
+  {
     $db = $db->getConnection();
     $stmt = $db->prepare("SELECT COUNT(*) FROM members WHERE active = 0");
     $stmt->execute();
@@ -106,5 +158,4 @@ class Member
 
     return $inactive_members;
   }
-
-}                                           
+}

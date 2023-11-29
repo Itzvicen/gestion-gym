@@ -33,10 +33,10 @@
 								<div id="dropzone-container" class="hidden"></div>
 							{% endif %}
 						</div>
-						<img id="output" src="{% if member.getImagePath != 'uploads/pictures/default.png' %}../../{{ member.getImagePath }}{% endif %}" alt="Imagen de vista previa" class="w-full h-[248px] object-cover {% if member.getImagePath == 'uploads/pictures/default.png' %}hidden{% endif %}"/>
+						<img id="output" src="{% if member.getImagePath != 'uploads/pictures/default.png' %}../../{{ member.getImagePath }}{% endif %}" alt="Imagen de vista previa" class="w-full h-[248px] rounded-md object-cover {% if member.getImagePath == 'uploads/pictures/default.png' %}hidden{% endif %}"/>
 					</div>
 
-					<div class="md:w-2/3 grid grid-cols-1 gap-6 sm:grid-cols-2">
+					<div class="md:w-2/3 grid grid-cols-1 gap-6 sm:grid-cols-2 md:mt-0 mt-4">
 						<div>
 							<label class="text-gray-700" htmlfor="first_name">
 								Nombre
@@ -82,14 +82,14 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<div class="flex justify-end mt-8 gap-3">
-					<button type="submit" class="px-6 py-2 text-center text-gray-100 items-center inline-flex text-base leading-5 font-semibold rounded-md bg-black hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
-						Guardar
+					<button type="submit" class="px-6 py-2 text-center text-gray-100 items-center inline-flex gap-1 text-base leading-5 font-semibold rounded-md bg-black hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
+						Guardar <i class="fa-solid fa-download font-sm"></i>
 					</button>
-					<a href="/dashboard" class="close px-6 py-2 text-center items-center inline-flex text-base leading-5 font-semibold rounded-md bg-red-100 text-red-800" type="button">
-						Cancelar
-					</a>
+					<button type="button" onclick="openModal()" class="px-6 py-2 text-center text-white items-center inline-flex gap-1 text-base leading-5 font-semibold rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:bg-gray-600">
+						Borrar <i class="fa-solid fa-trash font-sm"></i>
+					</button>
 				</div>
 			</form>
 		</div>
@@ -119,33 +119,20 @@
 	</div>
 </div>
 <script>
-	var loadFile = function (event) {
-	var output = document.getElementById('output');
-	var dropzoneContainer = document.getElementById('dropzone-container');
-
-	output.src = URL.createObjectURL(event.target.files[0]);
-	output.onload = function () {
-	URL.revokeObjectURL(output.src); // Libera la memoria de la URL
-	};
-	output.classList.remove('hidden'); // Muestra la imagen de vista previa
-	dropzoneContainer.classList.add('hidden'); // Oculta el input de subida
-	};
-
-	// Añadir la siguiente línea para mostrar el toast si hay un mensaje de actualización
-		{% if updateMessage %}
-			Toastify({
-				text: "{{ updateMessage }}",
-				duration: 3000,
-				newWindow: true,
-				close: true,
-				gravity: "top", // `top` o `bottom`
-				position: 'right', // `left`, `center` o `right`
-				stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
-				style: {
-					background: "rgb(187 247 208)",
-					color: "rgb(34 197 94)",
-					borderRadius: "10px"
-				}
-			}).showToast();
-		{% endif %}
+	{% if updateMessage %}
+		Toastify({
+			text: "{{ updateMessage }}",
+			duration: 3000,
+			newWindow: true,
+			close: true,
+			gravity: "top", // `top` o `bottom`
+			position: 'right', // `left`, `center` o `right`
+			stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
+			style: {
+			background: "rgb(187 247 208)",
+			color: "rgb(34 197 94)",
+			borderRadius: "10px"
+			}
+		}).showToast();
+	{% endif %}
 </script>

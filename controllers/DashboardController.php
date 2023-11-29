@@ -57,6 +57,15 @@ class DashboardController
     $searchQuery = $_GET['query'] ?? '';
     $isSearching = !empty($_GET['query']);
 
+    $deleteMessage = '';
+    if (isset($_SESSION['delete_success'])) {
+      $deleteMessage = $_SESSION['delete_success'];
+      unset($_SESSION['delete_success']);
+    } else if (isset($_SESSION['delete_error'])) {
+      $deleteMessage = $_SESSION['delete_error'];
+      unset($_SESSION['delete_error']);
+    }
+
     // Obtener las 2 primeras letras del nombre de usuario
     $avatar_fallback = substr($username, 0, 2);
     // Obtener todos los miembros
@@ -82,7 +91,8 @@ class DashboardController
       'members' => $members,
       'currentUrl' => $currentUrl,
       'isSearching' => $isSearching,
-      'searchQuery' => $_GET['query'] ?? ''
+      'searchQuery' => $_GET['query'] ?? '',
+      'deleteMessage' => $deleteMessage
     ]);
 }
 
