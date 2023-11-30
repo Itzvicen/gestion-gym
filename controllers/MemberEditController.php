@@ -114,7 +114,7 @@ class MemberEditController
   public function delete($memberId) {
     $deleteCount = Member::deleteMember($memberId, $this->db);
 
-    if ($deleteCount === 0) {
+    if ($deleteCount == 0) {
       $_SESSION['delete_error'] = 'Error al eliminar.';
     } else {
       $_SESSION['delete_success'] = 'Miembro eliminado con éxito.';

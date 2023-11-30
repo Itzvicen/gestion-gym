@@ -67,4 +67,9 @@ switch ($request) {
   case (preg_match("/^\/account\/update/", $request) && $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false):
     $accountController->updateAccount();
     break;
+  default:
+    http_response_code(404);
+    echo $twig->render('404.twig');
+    break;
+    
 }

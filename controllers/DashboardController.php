@@ -33,6 +33,24 @@ class DashboardController
     $total_payments = Payment::getTotalPayments($this->db);
     // Obtener los pagos no pagados
     $unpaid_payments = Payment::getUnpaidPayments($this->db);
+    $deleteMessage = '';
+    if (isset($_SESSION['delete_success'])) {
+      $deleteMessage = $_SESSION['delete_success'];
+      unset($_SESSION['delete_success']);
+    } else if (isset($_SESSION['delete_error'])) {
+      $deleteMessage = $_SESSION['delete_error'];
+      unset($_SESSION['delete_error']);
+    }
+
+    $createMessage = '';
+    if (isset($_SESSION['create_success'])) {
+      $createMessage = $_SESSION['create_success'];
+      unset($_SESSION['create_success']);
+    } else if (isset($_SESSION['create_error'])) {
+      $createMessage = $_SESSION['create_error'];
+      unset($_SESSION['create_error']);
+    }
+
 
     echo $this->twig->render('dashboard.twig', [
       'username' => $username,
@@ -42,7 +60,9 @@ class DashboardController
       'total_payments' => $total_payments,
       'unpaid_payments' => $unpaid_payments,
       'members' => $members,
-      'currentUrl' => $currentUrl
+      'currentUrl' => $currentUrl,
+      'deleteMessage' => $deleteMessage,
+      'createMessage' => $createMessage
     ]);
   }
 
@@ -56,15 +76,6 @@ class DashboardController
     $currentUrl = $_SERVER['REQUEST_URI'];
     $searchQuery = $_GET['query'] ?? '';
     $isSearching = !empty($_GET['query']);
-
-    $deleteMessage = '';
-    if (isset($_SESSION['delete_success'])) {
-      $deleteMessage = $_SESSION['delete_success'];
-      unset($_SESSION['delete_success']);
-    } else if (isset($_SESSION['delete_error'])) {
-      $deleteMessage = $_SESSION['delete_error'];
-      unset($_SESSION['delete_error']);
-    }
 
     // Obtener las 2 primeras letras del nombre de usuario
     $avatar_fallback = substr($username, 0, 2);
@@ -91,8 +102,7 @@ class DashboardController
       'members' => $members,
       'currentUrl' => $currentUrl,
       'isSearching' => $isSearching,
-      'searchQuery' => $_GET['query'] ?? '',
-      'deleteMessage' => $deleteMessage
+      'searchQuery' => $_GET['query'] ?? ''
     ]);
 }
 

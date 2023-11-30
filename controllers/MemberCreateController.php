@@ -38,10 +38,16 @@ class MemberCreateController
         'image_path' => $imagePath
       ];
 
-      $memberId = Member::createMember($memberData, $this->db);
+      $result = Member::createMember($memberData, $this->db);
+
+      if ($result) {
+        $_SESSION['create_success'] = 'Miembro creado correctamente';
+      } else {
+        $_SESSION['create_error'] = 'Error al crear el miembro';
+      }
 
       // Redirigir al usuario o mostrar un mensaje de éxito/error
-      header('Location: /dashboard/edit/' . $memberId);
+      header('Location: /dashboard');
     }
   }
 

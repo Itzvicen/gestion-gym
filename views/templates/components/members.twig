@@ -6,9 +6,9 @@
 				<p class="text-gray-500 text-sm mb-2">Resultados de la búsqueda para "{{ searchQuery }}"</p>
 			</div>
 			<div>
-				<button class="px-4 py-2 h-12 text-white text-sm font-semibold bg-black rounded-md">
+				<a href="/dashboard" class="px-4 py-2 text-sm font-medium text-white bg-black rounded-md">
 					Limpiar busqueda
-				</button>
+				</a>
 			</div>
 		</div>
 	{% else %}
@@ -82,3 +82,37 @@
 		{% endif %}
 	</div>
 </div>
+<script>
+	{% if deleteMessage %}
+		Toastify({
+      text: "{{ deleteMessage }}",
+      duration: 3000,
+      newWindow: true,
+      close: true,
+      gravity: "top", // `top` o `bottom`
+      position: 'right', // `left`, `center` o `right`
+      stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
+      style: {
+        background: "rgb(187 247 208)",
+        color: "rgb(34 197 94)",
+        borderRadius: "10px"
+      }
+		}).showToast();
+	{% endif %}
+	{% if createMessage %}
+		Toastify({
+			text: "{{ createMessage }}",
+			duration: 3000,
+			newWindow: true,
+			close: true,
+			gravity: "top", // `top` o `bottom`
+			position: 'right', // `left`, `center` o `right`
+			stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
+			style: {
+				background: "rgb(187 247 208)",
+				color: "rgb(34 197 94)",
+				borderRadius: "10px"
+			}
+		}).showToast();
+	{% endif %}
+</script>

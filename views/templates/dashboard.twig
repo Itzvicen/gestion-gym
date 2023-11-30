@@ -7,6 +7,7 @@
 		<link href="../dist/output.css" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 		<script src="../src/js/dashboard.js" defer></script>
 	</head>
 
@@ -21,26 +22,11 @@
 					{% include 'components/stats.twig' %}
 					{% include 'components/members.twig' %}
 					{% include 'components/create_member.twig' %}
+					{% if sessionData is defined %}
+						<pre>{{ sessionData }}</pre>
+					{% endif %}
 				</div>
 			</div>
 		</div>
-		<script>
-			{% if deleteMessage %}
-				Toastify({
-					text: "{{ deleteMessage }}",
-					duration: 3000,
-					newWindow: true,
-					close: true,
-					gravity: "top", // `top` o `bottom`
-					position: 'right', // `left`, `center` o `right`
-					stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
-					style: {
-					background: "rgb(187 247 208)",
-					color: "rgb(34 197 94)",
-					borderRadius: "10px"
-					}
-				}).showToast();
-			{% endif %}
-		</script>
 	</body>
 </html>
