@@ -741,10 +741,6 @@ video {
   margin-top: 2rem;
 }
 
-.mt-3 {
-  margin-top: 0.75rem;
-}
-
 .block {
   display: block;
 }
@@ -817,6 +813,10 @@ video {
   min-height: 100vh;
 }
 
+.w-1\/2 {
+  width: 50%;
+}
+
 .w-10 {
   width: 2.5rem;
 }
@@ -879,12 +879,12 @@ video {
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
-.grid-cols-6 {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-}
-
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
 .flex-col {
@@ -1516,18 +1516,14 @@ video {
   background-color: rgb(226 232 240 / 0.4);
 }
 
-.hover\:font-semibold:hover {
-  font-weight: 600;
+.hover\:text-blue-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
 }
 
 .hover\:text-gray-700:hover {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
-}
-
-.hover\:text-blue-500:hover {
-  --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity));
 }
 
 .hover\:underline:hover {
@@ -1800,19 +1796,15 @@ video {
 }
 
 @media (min-width: 1536px) {
+  .\32xl\:w-1\/5 {
+    width: 20%;
+  }
+
   .\32xl\:w-\[24\.3\%\] {
     width: 24.3%;
   }
 
   .\32xl\:w-\[40\%\] {
     width: 40%;
-  }
-
-  .\32xl\:w-1 {
-    width: 0.25rem;
-  }
-
-  .\32xl\:w-1\/5 {
-    width: 20%;
   }
 }

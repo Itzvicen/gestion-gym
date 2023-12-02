@@ -20,11 +20,21 @@ class AccountController
     $userId = $_SESSION['id'];
     $user = User::getUserById($userId, $this->db);
     $userData = $user[0];
+    $avatar_fallback = substr($username, 0, 2);
 
     // Obtener información del formulario
     $first_name = $userData['first_name'];
     $last_name = $userData['last_name'];
     $email = $userData['email'];
+
+    $passwordMessage = '';
+    if (isset($_SESSION['password_success'])) {
+      $passwordMessage = $_SESSION['password_success'];
+      unset($_SESSION['password_success']);
+    } else if (isset($_SESSION['password_error'])) {
+      $passwordMessage = $_SESSION['password_error'];
+      unset($_SESSION['password_error']);
+    }
 
     echo $this->twig->render('profile.twig', [
       'user' => $userData,  // Pass the entire user data for reference
@@ -33,7 +43,9 @@ class AccountController
       'currentUrl' => $currentUrl,
       'first_name' => $first_name,
       'last_name' => $last_name,
-      'email' => $email
+      'email' => $email,
+      'passwordMessage' => $passwordMessage,
+      'avatar' => $avatar_fallback
     ]);
   }
 
@@ -124,5 +136,50 @@ class AccountController
 
     // Redirigir al usuario a la página de inicio
     header('Location: /');
+  }
+
+  public function changePassword()
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      // Obtener la información del formulario
+      $current_password = $_POST['current_password'];
+      $new_password = $_POST['new_password'];
+      $confirm_new_password = $_POST['confirm_new_password'];
+
+      // Obtener la información del usuario actual
+      $userId = $_SESSION['id'];
+      $user = User::getUserById($userId, $this->db);
+      $userData = $user[0];
+
+      // Verificar que la contraseña actual sea correcta
+      if (!password_verify($current_password, $userData['password'])) {
+        $_SESSION['password_error'] = 'La contraseña actual es incorrecta';
+        header('Location: /profile');
+        exit;
+      }
+
+      // Verificar que la nueva contraseña y la confirmación sean iguales
+      if ($new_password !== $confirm_new_password) {
+        $_SESSION['password_error'] = 'La nueva contraseña y la confirmación no coinciden';
+        header('Location: /profile');
+        exit;
+      }
+
+      // Actualizar la contraseña en la base de datos
+      $result = User::updatePassword($userId, $new_password, $this->db);
+
+      if ($result > 0) {
+        $_SESSION['password_success'] = 'Contraseña actualizada correctamente';
+      } else {
+        $_SESSION['password_error'] = 'Error al actualizar la contraseña';
+      }
+
+      // Redirigir al usuario a la página de perfil
+      header('Location: /profile');
+      exit;
+    } else {
+      // Mostrar el formulario de cambio de contraseña
+      $this->editAccount();
+    }
   }
 }

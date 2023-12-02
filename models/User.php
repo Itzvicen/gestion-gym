@@ -38,8 +38,32 @@ class User
 
   public function checkCredentials($username, $password)
   {
-    $stmt = $this->db->prepare('SELECT * FROM users WHERE username = :username AND password = :password');
-    $stmt->execute(['username' => $username, 'password' => $password]);
-    return $stmt->fetch();
+    $stmt = $this->db->prepare('SELECT * FROM users WHERE username = :username');
+    $stmt->execute(['username' => $username]);
+    $user = $stmt->fetch();
+
+    if ($user && password_verify($password, $user['password'])) {
+      return $user;
+    }
+
+    return null;
+  }
+
+  public static function updatePassword($userId, $newPassword, $db)
+  {
+    // Encriptar la nueva contraseña
+    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+    // Preparar la consulta SQL
+    $db = $db->getConnection();
+    $stmt = $db->prepare("UPDATE users SET password = :password WHERE id = :id");
+
+    // Vincular los parámetros
+    $stmt->bindParam(':password', $hashedPassword);
+    $stmt->bindParam(':id', $userId);
+
+    // Ejecutar la consulta
+    $stmt->execute();
+    return $stmt->rowCount();
   }
 }

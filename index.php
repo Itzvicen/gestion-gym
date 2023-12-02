@@ -74,8 +74,11 @@ switch ($request) {
   case '/profile':
     $accountController->editAccount();
     break;
-  case (preg_match("/^\/account\/update/", $request) && $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false):
+  case (preg_match("/^\/profile\/update/", $request) && $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false):
     $accountController->updateAccount();
+    break;
+  case (preg_match("/^\/profile\/change-password/", $request) && $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false):
+    $accountController->changePassword();
     break;
   default:
     http_response_code(404);
