@@ -1,9 +1,33 @@
-<div class="overflow-x-auto w-full border rounded-md mb-6 shadow">
+<div class="flex items-center justify-between mb-2">
+	<div>
+		<h2 class="font-bold text-2xl">Pagos</h2>
+		<p class="text-gray-500 text-sm">Aquí puedes ver todos los pagos registrados en el sistema.</p>
+	</div>
+	<div class="flex gap-2">
+		<button onclick="openModal()" class="px-4 py-2 text-sm font-medium text-white bg-black rounded-md">
+			Crear nuevo pago
+		</button>
+		<form method="get" action="/dashboard/payments/order">
+			<select name="by" class="px-5 py-2 text-sm font-medium text-gray-500 border rounded-l-md text-center">
+				<option value="default">Ordenar por</option>
+				<option value="recent">Más recientes</option>
+				<option value="old">Más antiguos</option>
+				<option value="total_asc">Total ascendente</option>
+				<option value="total_desc">Total descendente</option>
+			</select>
+			<button type="submit" class="px-6 py-[8.5px] mb-[0.8px] -ml-[6px] text-sm font-medium text-white bg-black border rounded-r-md">
+				Aplicar
+			</button>
+		</form>
+	</div>
+</div>
+
+<div class="overflow-x-auto w-full border rounded-md mb-6 shadow mt-6">
 	<table class="min-w-full text-center divide-y divide-gray-200 p-3 bg-white text-sm">
 		<thead>
 			<tr>
-				<th class="whitespace-nowrap px-4 py-4 font-medium text-gray-900">ID</th>
-				<th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">ID del miembro</th>
+				<th class="whitespace-nowrap px-4 py-4 font-medium text-gray-900">Identificador</th>
+				<th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Miembro</th>
 				<th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Total</th>
 				<th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Fecha de pago</th>
 				<th class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">Método de pago</th>
@@ -15,7 +39,11 @@
 			{% for payment in payments %}
 				<tr>
 					<td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">{{ payment.id }}</td>
-          <td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ payment.first_name }} {{ payment.last_name }}</td>
+					<td class="whitespace-nowrap px-4 py-2 text-gray-700 hover:text-blue-500 hover:underline">
+						<a href="/dashboard/edit/{{payment.member_id}}" class="hover:text-blue-500">
+							{{ payment.first_name }} {{ payment.last_name }}
+						</a>
+					</td>
 					<td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ payment.amount }}
 						€</td>
 					<td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ payment.payment_date|date('d/m/Y') }}</td>

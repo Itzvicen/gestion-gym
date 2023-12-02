@@ -1,0 +1,66 @@
+<div id="modal" class="hidden absolute inset-0 z-50 bg-gray-600 bg-opacity-50">
+	<div class="flex items-center justify-center min-h-screen">
+		<div class="md:h-auto 2xl:w-[40%] md:w-[60%] w-full bg-[#F9FAFB] p-6 rounded-lg">
+			<h3 class="font-bold text-lg">Crear pago</h3>
+			<form class="flex flex-col" action="/dashboard/payments/create" method="POST" enctype="multipart/form-data">
+					<div class="grid gap-6 grid-cols-2 mt-4">
+						<div>
+							<label class="text-gray-700" htmlfor="member_id">
+								Selecciona el miembro
+							</label>
+							<select class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" name="member_id">
+								{% for member in members %}
+									<option value="{{ member.id }}">{{ member.first_name }} {{ member.last_name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div>
+							<label class="text-gray-700" htmlfor="last_name">
+								Total a pagar (€)
+							</label>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="amount"/>
+						</div>
+						<div>
+							<label class="text-gray-700" htmlfor="phone">
+								Método de pago
+							</label>
+							<select class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" name="payment_method">
+								<option value="Efectivo">Efectivo</option>
+								<option value="Tarjeta">Tarjeta</option>
+							</select>
+						</div>
+						<div>
+							<label class="text-gray-700" htmlfor="active">Estado del pago</label>
+							<select class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" name="payment_status">
+								<option value="Pagado">Pagado</option>
+								<option value="Impagado">Impagado</option>
+							</select>
+						</div>
+					</div>
+
+				<div class="flex justify-end mt-8 gap-3">
+					<button type="submit" class="px-6 py-2 text-center text-gray-100 items-center inline-flex text-base leading-5 font-semibold rounded-md bg-black hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
+						Guardar
+						<i class="fa-solid fa-download"></i>
+					</button>
+					<button onclick="closeModal()" class="close px-6 py-2 text-center items-center inline-flex text-base leading-5 font-semibold rounded-md bg-red-100 text-red-800" type="button">
+						Cancelar
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	var loadFile = function (event) {
+var output = document.getElementById('output');
+var dropzoneContainer = document.getElementById('dropzone-container');
+
+output.src = URL.createObjectURL(event.target.files[0]);
+output.onload = function () {
+URL.revokeObjectURL(output.src); // Libera la memoria de la URL
+};
+output.classList.remove('hidden'); // Muestra la imagen de vista previa
+dropzoneContainer.classList.add('hidden'); // Oculta el input de subida
+};
+</script>

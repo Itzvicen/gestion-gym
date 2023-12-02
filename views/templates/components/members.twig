@@ -12,17 +12,27 @@
 			</div>
 		</div>
 	{% else %}
-		<div class="flex items-center justify-between">
+		<div class="flex items-center justify-between mb-2">
 			<div>
 				<h2 class="font-bold text-2xl">Miembros registrados</h2>
-				<p class="text-gray-500 text-sm mb-2">Aquí puedes ver todos los miembros registrados en el sistema.</p>
+				<p class="text-gray-500 text-sm">Aquí puedes ver todos los miembros registrados en el sistema.</p>
 			</div>
-			<div>
+			<div class="flex gap-2">
 				<button onclick="openModal()" class="px-4 py-2 text-sm font-medium text-white bg-black rounded-md">
 					Añadir nuevo miembro
 				</button>
+				<form method="get" action="/dashboard/order">
+					<select name="by" class="px-5 py-2 text-sm font-medium text-gray-500 border rounded-l-md text-center">
+						<option value="default">Ordenar por</option>
+						<option value="recent">Más recientes</option>
+						<option value="old">Más antiguos</option>
+						<option value="alphabetical">Alfabético</option>
+					</select>
+					<button type="submit" class="px-6 py-[8.5px] mb-[0.8px] -ml-[6px] text-sm font-medium text-white bg-black border rounded-r-md">
+						Aplicar
+					</button>
+				</form>
 			</div>
-
 		</div>
 	{% endif %}
 
@@ -38,7 +48,7 @@
 						</div>
 
 						<div class="hidden sm:block sm:shrink-0">
-							<img alt={{member.first_name}} src="{{member.image_path}}" class="h-14 w-14 rounded-lg object-cover"/>
+							<img alt={{member.first_name}} src="../{{member.image_path}}" class="h-14 w-14 rounded-lg object-cover"/>
 						</div>
 					</div>
 
@@ -85,34 +95,34 @@
 <script>
 	{% if deleteMessage %}
 		Toastify({
-      text: "{{ deleteMessage }}",
-      duration: 3000,
-      newWindow: true,
-      close: true,
-      gravity: "top", // `top` o `bottom`
-      position: 'right', // `left`, `center` o `right`
-      stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
-      style: {
-        background: "rgb(187 247 208)",
-        color: "rgb(34 197 94)",
-        borderRadius: "10px"
-      }
+		text: "{{ deleteMessage }}",
+		duration: 3000,
+		newWindow: true,
+		close: true,
+		gravity: "top", // `top` o `bottom`
+		position: 'right', // `left`, `center` o `right`
+		stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
+		style: {
+		background: "rgb(187 247 208)",
+		color: "rgb(34 197 94)",
+		borderRadius: "10px"
+		}
 		}).showToast();
 	{% endif %}
 	{% if createMessage %}
 		Toastify({
-			text: "{{ createMessage }}",
-			duration: 3000,
-			newWindow: true,
-			close: true,
-			gravity: "top", // `top` o `bottom`
-			position: 'right', // `left`, `center` o `right`
-			stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
-			style: {
-				background: "rgb(187 247 208)",
-				color: "rgb(34 197 94)",
-				borderRadius: "10px"
-			}
+		text: "{{ createMessage }}",
+		duration: 3000,
+		newWindow: true,
+		close: true,
+		gravity: "top", // `top` o `bottom`
+		position: 'right', // `left`, `center` o `right`
+		stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
+		style: {
+		background: "rgb(187 247 208)",
+		color: "rgb(34 197 94)",
+		borderRadius: "10px"
+		}
 		}).showToast();
 	{% endif %}
 </script>

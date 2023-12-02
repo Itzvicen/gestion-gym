@@ -55,6 +55,45 @@ class Payment {
     return $payments;
   }
 
+  // Crear un nuevo pago
+  public static function createPayment($db, $member_id, $amount, $payment_method, $payment_status) {
+    $db = $db->getConnection();
+    $stmt = $db->prepare("
+      INSERT INTO payments (member_id, amount, payment_method, payment_status) 
+      VALUES (:member_id, :amount, :payment_method, :payment_status)
+      ");
+    $stmt->bindParam(':member_id', $member_id);
+    $stmt->bindParam(':amount', $amount);
+    $stmt->bindParam(':payment_method', $payment_method);
+    $stmt->bindParam(':payment_status', $payment_status);
+    $stmt->execute();
+  }
+
+  // Método estático para obtener todos los pagos por ordenacion
+  public static function getOrderedPayments($order, $db) {
+    $db = $db->getConnection();
+    switch ($order) {
+      case 'recent':
+        $stmt = $db->prepare('SELECT p.*, m.first_name, m.last_name FROM payments p JOIN members m ON p.member_id = m.id ORDER BY payment_date DESC');
+        break;
+      case 'old':
+          $stmt = $db->prepare('SELECT p.*, m.first_name, m.last_name FROM payments p JOIN members m ON p.member_id = m.id ORDER BY payment_date ASC');
+          break;
+      case 'total_asc':
+          $stmt = $db->prepare('SELECT p.*, m.first_name, m.last_name FROM payments p JOIN members m ON p.member_id = m.id ORDER BY amount ASC');
+          break;
+      case 'total_desc':
+          $stmt = $db->prepare('SELECT p.*, m.first_name, m.last_name FROM payments p JOIN members m ON p.member_id = m.id ORDER BY amount DESC');
+          break;
+      default:
+          $stmt = $db->prepare('SELECT p.*, m.first_name, m.last_name FROM payments p JOIN members m ON p.member_id = m.id');
+          break;
+    }
+
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   // Obtener la suma de pagos de los últimos 30 días
   public static function getTotalPayments($db) {
     $db = $db->getConnection();

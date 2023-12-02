@@ -3,12 +3,6 @@
 		<h2 class="font-bold text-2xl">Tu cuenta</h2>
 		<p>Visualiza y modifica tus datos personales</p>
 	</div>
-	{% if updateMessage %}
-		<div class="flex items-center justify-between bg-green-200 text-green-500 rounded-md w-1/4 py-2 px-4 mb-4">
-			<p class="font-semibold">{{ updateMessage }}</p>
-		</div>
-	{% endif %}
-
 	<div class="w-full flex md:flex-row flex-col gap-8">
 		<div class="md:h-auto md:w-[60%] w-full bg-[#F9FAFB] p-6 rounded-lg">
 			<h3 class="font-bold text-lg">Editar</h3>
@@ -36,24 +30,17 @@
 						</div>
 
 						<div>
-							<label class="text-gray-700" htmlfor="phone">
-								Teléfono
-							</label>
-							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="phone" value="{{ user.getPhone }}"/>
-						</div>
-
-						<div>
 							<label class="text-gray-700" htmlfor="registration_date">
 								Contraseña
 							</label>
-							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="password" name="registration_date" value="{{ user.getRegistrationDate }}"/>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="password" name="registration_date"/>
 						</div>
 
 						<div>
 							<label class="text-gray-700" htmlfor="birth_date">
 								Confirmar contraseña
 							</label>
-							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="password" name="birth_date" value="{{ user.getBirthdate }}"/>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="password" name="birth_date"/>
 						</div>
 
 					</div>

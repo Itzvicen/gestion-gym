@@ -71,10 +71,30 @@ class Member
   }
 
   // Método estático para obtener todos los miembros
-  public static function getAllMembers($db)
-  {
+  public static function getAllMembers($db) {
     $db = $db->getConnection();
     $stmt = $db->prepare('SELECT * FROM members');
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  // Método estático para obtener todos los miembros por ordenacion
+  public static function getOrderedMembers($order, $db) {
+    $db = $db->getConnection();
+    switch ($order) {
+        case 'recent':
+            $stmt = $db->prepare('SELECT * FROM members ORDER BY registration_date DESC');
+            break;
+        case 'old':
+            $stmt = $db->prepare('SELECT * FROM members ORDER BY registration_date ASC');
+            break;
+        case 'alphabetical':
+            $stmt = $db->prepare('SELECT * FROM members ORDER BY first_name ASC, last_name ASC');
+            break;
+        default:
+            $stmt = $db->prepare('SELECT * FROM members');
+            break;
+    }
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
@@ -128,8 +148,7 @@ class Member
   }
 
   // Método estático para buscar miembros por nombre
-  public static function searchByName($query, $db)
-  {
+  public static function searchByName($query, $db) {
     $db = $db->getConnection();
     $stmt = $db->prepare("SELECT * FROM members WHERE first_name LIKE :query OR last_name LIKE :query");
     $stmt->bindValue(':query', '%' . $query . '%');
@@ -138,8 +157,7 @@ class Member
   }
 
   // Metodo estatico para obtener miembros activos
-  public static function getActiveMembers($db)
-  {
+  public static function getActiveMembers($db) {
     $db = $db->getConnection();
     $stmt = $db->prepare("SELECT COUNT(*) FROM members WHERE active = 1");
     $stmt->execute();
@@ -149,8 +167,7 @@ class Member
   }
 
   // Metodo estatico para obtener miembros inactivos
-  public static function getInactiveMembers($db)
-  {
+  public static function getInactiveMembers($db) {
     $db = $db->getConnection();
     $stmt = $db->prepare("SELECT COUNT(*) FROM members WHERE active = 0");
     $stmt->execute();

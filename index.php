@@ -58,10 +58,20 @@ switch ($request) {
   case '/dashboard/payments':
     $paymentController->showPayments();
     break;
+  case '/dashboard/payments/create':
+    $paymentController->createPayment();
+    break;
   case (preg_match("/^\/dashboard\/search/", $request) ? true : false):
     $dashboardController->searchMembers();
     break;
-  case '/account':
+  case (preg_match("/^\/dashboard\/order/", $request) ? true : false):
+    $dashboardController->sortMembers();
+    break;
+  // Ordenar pagos
+  case (preg_match("/^\/dashboard\/payments\/order/", $request) ? true : false):
+    $paymentController->sortPayments();
+    break;
+  case '/profile':
     $accountController->editAccount();
     break;
   case (preg_match("/^\/account\/update/", $request) && $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false):
@@ -71,5 +81,4 @@ switch ($request) {
     http_response_code(404);
     echo $twig->render('404.twig');
     break;
-    
 }
