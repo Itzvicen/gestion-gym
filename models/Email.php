@@ -2,6 +2,7 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use Dotenv\Dotenv;
 
 require_once __DIR__ . '/../vendor/autoload.php'; // Ajusta la ruta según tu estructura de directorios
 
@@ -9,17 +10,20 @@ class Email
 {
   public static function sendEmail($member, $training)
   {
+    $dotenv = Dotenv::createImmutable(__DIR__ . '/../config/');
+    $dotenv->load();
+
     $mail = new PHPMailer(true);
 
     try {
       // Configuración del servidor
       $mail->isSMTP();
-      $mail->Host = 'gym.vicentesantiago.tech';
+      $mail->Host = $_ENV['MAIL_HOST'];
       $mail->SMTPAuth = true;
-      $mail->Username = 'info@gym.vicentesantiago.tech';
-      $mail->Password = 'EWp9:!d6f2FNP!f';
-      $mail->SMTPSecure = 'ssl';
-      $mail->Port = 465;
+      $mail->Username = $_ENV['MAIL_USERNAME'];
+      $mail->Password = $_ENV['MAIL_PASSWORD'];
+      $mail->SMTPSecure = 'tls';
+      $mail->Port = $_ENV['MAIL_PORT'];
 
       // Tiempo de espera y depuración
       $mail->Timeout = 30;
