@@ -80,14 +80,15 @@ class Member
   }
 
   // Método estático para obtener un miembro por id
-  public static function getMemberById($id, $db)
+  public static function getMemberById($memberId, $db)
   {
     $db = $db->getConnection();
     $stmt = $db->prepare('SELECT * FROM members WHERE id = :id');
-    $stmt->execute(['id' => $id]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->bindParam(':id', $memberId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
   }
-
+  
   // Método estático para obtener todos los miembros por ordenacion
   public static function getOrderedMembers($order, $db)
   {

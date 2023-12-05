@@ -41,41 +41,41 @@
 							<label class="text-gray-700" htmlfor="first_name">
 								Nombre
 							</label>
-							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="first_name" value="{{ member.getFirstName }}"/>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="first_name" required value="{{ member.getFirstName }}"/>
 						</div>
 						<div>
 							<label class="text-gray-700" htmlfor="last_name">
 								Apellidos
 							</label>
-							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="last_name" value="{{ member.getLastName }}"/>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="last_name" required value="{{ member.getLastName }}"/>
 						</div>
 						<div>
 							<label class="text-gray-700" htmlfor="email">
 								Email
 							</label>
-							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="email" name="email" value="{{ member.getEmail }}"/>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="email" name="email" required value="{{ member.getEmail }}"/>
 						</div>
 						<div>
 							<label class="text-gray-700" htmlfor="phone">
 								Teléfono
 							</label>
-							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="phone" value="{{ member.getPhone }}"/>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="phone" required value="{{ member.getPhone }}"/>
 						</div>
 						<div>
 							<label class="text-gray-700" htmlfor="registration_date">
 								Fecha de registro
 							</label>
-							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="date" name="registration_date" value="{{ member.getRegistrationDate }}"/>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="date" name="registration_date" required value="{{ member.getRegistrationDate }}"/>
 						</div>
 						<div>
 							<label class="text-gray-700" htmlfor="birth_date">
 								Fecha de nacimiento
 							</label>
-							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="date" name="birth_date" value="{{ member.getBirthdate }}"/>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="date" name="birth_date" required value="{{ member.getBirthdate }}"/>
 						</div>
 						<div>
 							<label class="text-gray-700" htmlfor="active">¿Está el usuario activo?</label>
-							<select class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" name="active" value="">
+							<select class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" name="active" required value="">
 								<option value="1" {{member.getActive == 1 ? "selected" : "" }}>Si</option>
 								<option value="0" {{member.getActive == 0 ? "selected" : "" }}>No</option>
 							</select>

@@ -55,6 +55,15 @@ class Payment {
     return $payments;
   }
 
+  // Obtener un pago por id de miembro
+  public static function getPaymentsByMemberId($memberId, $db) {
+    $db = $db->getConnection();
+    $stmt = $db->prepare('SELECT * FROM payments WHERE member_id = :member_id');
+    $stmt->bindParam(':member_id', $memberId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   // Crear un nuevo pago
   public static function createPayment($db, $member_id, $amount, $payment_method, $payment_status) {
     $db = $db->getConnection();

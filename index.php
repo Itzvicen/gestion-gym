@@ -26,7 +26,7 @@ $userModel = new User($pdo);
 
 // Crear instancias de controladores
 $loginController = new LoginController($twig, $pdo);
-$dashboardController = new DashboardController($twig, $userModel, $db); // Asegúrate de pasar los parámetros correctos
+$dashboardController = new DashboardController($twig, $userModel, $db);
 $paymentController = new PaymentController($twig, $db);
 $memberEditController = new MemberEditController($twig, $db);
 $memberCreateController = new MemberCreateController($twig, $db);
@@ -36,13 +36,6 @@ $logoutController = new LogoutController();
 
 // Enrutamiento
 $request = $_SERVER['REQUEST_URI'];
-
-if (strpos($request, '/dashboard/') === 0 || strpos($request, '/profile/') === 0) {
-  if (!isset($_SESSION['username'])) {
-    header('Location: /');
-    exit();
-  }
-}
 
 switch ($request) {
   case '/logout':
