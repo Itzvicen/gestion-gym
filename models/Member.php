@@ -71,36 +71,48 @@ class Member
   }
 
   // Método estático para obtener todos los miembros
-  public static function getAllMembers($db) {
+  public static function getAllMembers($db)
+  {
     $db = $db->getConnection();
     $stmt = $db->prepare('SELECT * FROM members');
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  // Método estático para obtener un miembro por id
+  public static function getMemberById($id, $db)
+  {
+    $db = $db->getConnection();
+    $stmt = $db->prepare('SELECT * FROM members WHERE id = :id');
+    $stmt->execute(['id' => $id]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   // Método estático para obtener todos los miembros por ordenacion
-  public static function getOrderedMembers($order, $db) {
+  public static function getOrderedMembers($order, $db)
+  {
     $db = $db->getConnection();
     switch ($order) {
-        case 'recent':
-            $stmt = $db->prepare('SELECT * FROM members ORDER BY registration_date DESC');
-            break;
-        case 'old':
-            $stmt = $db->prepare('SELECT * FROM members ORDER BY registration_date ASC');
-            break;
-        case 'alphabetical':
-            $stmt = $db->prepare('SELECT * FROM members ORDER BY first_name ASC, last_name ASC');
-            break;
-        default:
-            $stmt = $db->prepare('SELECT * FROM members');
-            break;
+      case 'recent':
+        $stmt = $db->prepare('SELECT * FROM members ORDER BY registration_date DESC');
+        break;
+      case 'old':
+        $stmt = $db->prepare('SELECT * FROM members ORDER BY registration_date ASC');
+        break;
+      case 'alphabetical':
+        $stmt = $db->prepare('SELECT * FROM members ORDER BY first_name ASC, last_name ASC');
+        break;
+      default:
+        $stmt = $db->prepare('SELECT * FROM members');
+        break;
     }
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
   // Método estático para crear un nuevo miembro
-  public static function createMember($data, $db) {
+  public static function createMember($data, $db)
+  {
     $db = $db->getConnection();
     $stmt = $db->prepare("INSERT INTO members (first_name, last_name, email, phone, birth_date, registration_date, active, image_path) VALUES (:first_name, :last_name, :email, :phone, :birth_date, :registration_date, :active, :image_path)");
     $stmt->execute([
@@ -118,7 +130,8 @@ class Member
   }
 
   // Metodo  estatico para actualizar un miembro
-  public static function updateMember($id, $data, $db) {
+  public static function updateMember($id, $data, $db)
+  {
     $db = $db->getConnection();
     $stmt = $db->prepare("UPDATE members SET first_name = :first_name, last_name = :last_name, email = :email, phone = :phone, birth_date = :birth_date, registration_date = :registration_date, active = :active, image_path = :image_path WHERE id = :id");
     $stmt->execute([
@@ -137,7 +150,8 @@ class Member
   }
 
   // Metodo estatico para eliminar un miembro
-  public static function deleteMember($id, $db) {
+  public static function deleteMember($id, $db)
+  {
     $db = $db->getConnection();
     $stmt = $db->prepare("DELETE FROM members WHERE id = :id");
     $stmt->execute([
@@ -148,7 +162,8 @@ class Member
   }
 
   // Método estático para buscar miembros por nombre
-  public static function searchByName($query, $db) {
+  public static function searchByName($query, $db)
+  {
     $db = $db->getConnection();
     $stmt = $db->prepare("SELECT * FROM members WHERE first_name LIKE :query OR last_name LIKE :query");
     $stmt->bindValue(':query', '%' . $query . '%');
@@ -157,7 +172,8 @@ class Member
   }
 
   // Metodo estatico para obtener miembros activos
-  public static function getActiveMembers($db) {
+  public static function getActiveMembers($db)
+  {
     $db = $db->getConnection();
     $stmt = $db->prepare("SELECT COUNT(*) FROM members WHERE active = 1");
     $stmt->execute();
@@ -167,7 +183,8 @@ class Member
   }
 
   // Metodo estatico para obtener miembros inactivos
-  public static function getInactiveMembers($db) {
+  public static function getInactiveMembers($db)
+  {
     $db = $db->getConnection();
     $stmt = $db->prepare("SELECT COUNT(*) FROM members WHERE active = 0");
     $stmt->execute();

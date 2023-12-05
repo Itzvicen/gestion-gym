@@ -9,14 +9,3 @@ var loadFile = function (event) {
   output.classList.remove("hidden"); // Muestra la imagen de vista previa
   dropzoneContainer.classList.add("hidden"); // Oculta el input de subida
 };
-
-// Funciones para abrir y cerrar el modal
-function openModal() {
-  document.getElementById("modal").classList.remove("hidden");
-  document.body.classList.add("overflow-hidden");
-}
-
-function closeModal() {
-  document.getElementById("modal").classList.add("hidden");
-  document.body.classList.remove("overflow-hidden");
-}

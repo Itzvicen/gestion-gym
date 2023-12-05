@@ -8,16 +8,13 @@
 			Crear nuevo pago
 		</button>
 		<form method="get" action="/dashboard/payments/order">
-			<select name="by" class="px-5 py-2 text-sm font-medium text-gray-500 border rounded-l-md text-center">
+			<select name="by" class="px-5 py-2 text-sm font-medium text-gray-500 border rounded-md text-center">
 				<option value="default">Ordenar por</option>
 				<option value="recent">Más recientes</option>
 				<option value="old">Más antiguos</option>
 				<option value="total_asc">Total ascendente</option>
 				<option value="total_desc">Total descendente</option>
 			</select>
-			<button type="submit" class="px-6 py-[8.5px] mb-[0.8px] -ml-[6px] text-sm font-medium text-white bg-black border rounded-r-md">
-				Aplicar
-			</button>
 		</form>
 	</div>
 </div>

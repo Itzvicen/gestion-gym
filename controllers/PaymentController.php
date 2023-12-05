@@ -13,30 +13,30 @@ class PaymentController
 
   public function showPayments()
   {
-    if (!isset($_SESSION['username'])) {
-      header('Location: /');
-      exit;
-    } else {
-      $username = $_SESSION['username'];
-    }
-
+    $id = $_SESSION['id'];
     $currentUrl = $_SERVER['REQUEST_URI'];
 
-    // Obtener las 2 primeras letras del nombre de usuario
-    $avatar_fallback = substr($username, 0, 2);
+    // Obtener infomarcion del usuario
+    $user = User::getUserById($id, $this->db);
+    // Obtener los pagos
     $payments = Payment::getAllPayments($this->db);
     $members = Member::getAllMembers($this->db);
 
+    // Obtener las 2 primeras letras del nombre
+    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
+    $avatar_fallback = substr($full_name, 0, 2);
+
     echo $this->twig->render('payments.twig', [
       'payments' => $payments,
-      'username' => $username,
+      'full_name' => $full_name,
       'avatar' => $avatar_fallback,
       'currentUrl' => $currentUrl,
       'members' => $members
     ]);
   }
 
-  public function createPayment() {
+  public function createPayment()
+  {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       // Recoger los datos del formulario
       $member_id = $_POST['member_id'];
@@ -58,25 +58,25 @@ class PaymentController
     }
   }
 
-  public function sortPayments() {
-    if (!isset($_SESSION['username'])) {
-        header('Location: /');
-        exit;
-    }
-
-    $username = $_SESSION['username'];
+  public function sortPayments()
+  {
+    $id = $_SESSION['id'];
     $currentUrl = $_SERVER['REQUEST_URI'];
     $order = $_GET['by'] ?? 'default';
 
-    // Obtener las 2 primeras letras del nombre de usuario
-    $avatar_fallback = substr($username, 0, 2);
+    // Obtener infomarcion del usuario
+    $user = User::getUserById($id, $this->db);
     // Obtener pagos
     $payments = Payment::getOrderedPayments($order, $this->db);
     $members = Member::getAllMembers($this->db);
 
+    // Obtener las 2 primeras letras del nombre
+    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
+    $avatar_fallback = substr($full_name, 0, 2);
+
     echo $this->twig->render('payments.twig', [
       'payments' => $payments,
-      'username' => $username,
+      'full_name' => $full_name,
       'avatar' => $avatar_fallback,
       'currentUrl' => $currentUrl,
       'members' => $members

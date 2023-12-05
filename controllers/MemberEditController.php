@@ -11,15 +11,16 @@ class MemberEditController
     $this->db = $db;
   }
 
-  public function edit($memberId) {
-    if (!isset($_SESSION['username'])) {
-      header('Location: /');
-      exit;
-    } else {
-      $username = $_SESSION['username'];
-    }
-    // Obtener las 2 primeras letras del nombre de usuario
-    $avatar_fallback = substr($username, 0, 2);
+  public function edit($memberId)
+  {
+    $id = $_SESSION['id'];
+
+    // Obtener información del usuario
+    $user = User::getUserById($id, $this->db);
+
+    // Obtener las 2 primeras letras del nombre
+    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
+    $avatar_fallback = substr($full_name, 0, 2);
 
     // Obtener información del miembro y pagos
     $db = $this->db->getConnection();
@@ -63,12 +64,13 @@ class MemberEditController
       'member' => $member,
       'payments' => $payments,
       'avatar' => $avatar_fallback,
-      'username' => $username,
+      'full_name' => $full_name,
       'updateMessage' => $updateMessage
     ]);
   }
 
-  public function update($memberId) {
+  public function update($memberId)
+  {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       // Obtener datos del formulario
       // Manejar la carga de la imagen
@@ -111,7 +113,8 @@ class MemberEditController
     }
   }
 
-  public function delete($memberId) {
+  public function delete($memberId)
+  {
     $deleteCount = Member::deleteMember($memberId, $this->db);
 
     if ($deleteCount == 0) {

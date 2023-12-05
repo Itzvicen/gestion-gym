@@ -5,24 +5,26 @@ class DashboardController
   private $twig;
   private $userModel;
   private $db;
-  
-  public function __construct($twig, $userModel, $db) {
-      $this->twig = $twig;
-      $this->userModel = $userModel;
-      $this->db = $db;
+
+  public function __construct($twig, $userModel, $db)
+  {
+    $this->twig = $twig;
+    $this->userModel = $userModel;
+    $this->db = $db;
   }
 
-  public function index() {
+  public function index()
+  {
     if (!isset($_SESSION['username'])) {
       header('Location: /');
       exit;
     }
 
-    $username = $_SESSION['username'];
+    $id = $_SESSION['id'];
     $currentUrl = $_SERVER['REQUEST_URI'];
 
-    // Obtener las 2 primeras letras del nombre de usuario
-    $avatar_fallback = substr($username, 0, 2);
+    // Obtener infomarcion del usuario
+    $user = User::getUserById($id, $this->db);
     // Obtener todos los miembros
     $members = Member::getAllMembers($this->db);
     // Obtener los miembros activos
@@ -33,6 +35,10 @@ class DashboardController
     $total_payments = Payment::getTotalPayments($this->db);
     // Obtener los pagos no pagados
     $unpaid_payments = Payment::getUnpaidPayments($this->db);
+
+    // Obtener las 2 primeras letras del nombre
+    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
+    $avatar_fallback = substr($full_name, 0, 2);
 
 
     $deleteMessage = '';
@@ -55,8 +61,8 @@ class DashboardController
 
 
     echo $this->twig->render('dashboard.twig', [
-      'username' => $username,
       'avatar' => $avatar_fallback,
+      'full_name' => $full_name,
       'active_members' => $active_members,
       'inactive_members' => $inactive_members,
       'total_payments' => $total_payments,
@@ -68,19 +74,15 @@ class DashboardController
     ]);
   }
 
-  public function searchMembers() {
-    if (!isset($_SESSION['username'])) {
-        header('Location: /');
-        exit;
-    }
-
-    $username = $_SESSION['username'];
+  public function searchMembers()
+  {
     $currentUrl = $_SERVER['REQUEST_URI'];
     $searchQuery = $_GET['query'] ?? '';
     $isSearching = !empty($_GET['query']);
+    $id = $_SESSION['id'];
 
-    // Obtener las 2 primeras letras del nombre de usuario
-    $avatar_fallback = substr($username, 0, 2);
+    // Obtener infomarcion del usuario
+    $user = User::getUserById($id, $this->db);
     // Obtener todos los miembros
     $members = Member::getAllMembers($this->db);
     // Obtener los miembros activos
@@ -94,9 +96,13 @@ class DashboardController
     // Obtener los miembros que coinciden con la consulta de búsqueda
     $members = Member::searchByName($searchQuery, $this->db);
 
+    // Obtener las 2 primeras letras del nombre
+    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
+    $avatar_fallback = substr($full_name, 0, 2);
+
     echo $this->twig->render('dashboard.twig', [
-      'username' => $username,
       'avatar' => $avatar_fallback,
+      'full_name' => $full_name,
       'active_members' => $active_members,
       'inactive_members' => $inactive_members,
       'total_payments' => $total_payments,
@@ -108,18 +114,19 @@ class DashboardController
     ]);
   }
 
-  public function sortMembers() {
+  public function sortMembers()
+  {
     if (!isset($_SESSION['username'])) {
-        header('Location: /');
-        exit;
+      header('Location: /');
+      exit;
     }
 
-    $username = $_SESSION['username'];
+    $id = $_SESSION['id'];
     $currentUrl = $_SERVER['REQUEST_URI'];
     $order = $_GET['by'] ?? 'default';
 
-    // Obtener las 2 primeras letras del nombre de usuario
-    $avatar_fallback = substr($username, 0, 2);
+    // Obtener infomarcion del usuario
+    $user = User::getUserById($id, $this->db);
     // Obtener todos los miembros
     $members = Member::getOrderedMembers($order, $this->db);
     // Obtener los miembros activos
@@ -131,9 +138,13 @@ class DashboardController
     // Obtener los pagos no pagados
     $unpaid_payments = Payment::getUnpaidPayments($this->db);
 
+    // Obtener las 2 primeras letras del nombre
+    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
+    $avatar_fallback = substr($full_name, 0, 2);
+
     echo $this->twig->render('dashboard.twig', [
-      'username' => $username,
       'avatar' => $avatar_fallback,
+      'full_name' => $full_name,
       'active_members' => $active_members,
       'inactive_members' => $inactive_members,
       'total_payments' => $total_payments,
@@ -143,5 +154,4 @@ class DashboardController
       'order' => $order
     ]);
   }
-
 }

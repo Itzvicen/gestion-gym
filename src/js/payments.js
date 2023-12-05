@@ -1,10 +1,11 @@
-// Funciones para abrir y cerrar el modal
-function openModal() {
-  document.getElementById("modal").classList.remove("hidden");
-  document.body.classList.add("overflow-hidden");
-}
+// Obtén el elemento select
+var selectElement = document.querySelector('select[name="by"]');
 
-function closeModal() {
-  document.getElementById("modal").classList.add("hidden");
-  document.body.classList.remove("overflow-hidden");
-}
+// Agrega un evento change al elemento select
+selectElement.addEventListener('change', function() {
+  // Obtén el formulario que contiene el select
+  var form = this.closest('form');
+
+  // Envía el formulario
+  form.submit();
+});

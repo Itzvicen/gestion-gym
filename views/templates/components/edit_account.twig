@@ -6,7 +6,7 @@
 	<div class="w-full flex md:flex-row flex-col gap-8">
 		<div class="md:h-auto md:w-[60%] w-full bg-[#F9FAFB] p-6 rounded-lg">
 			<h3 class="font-bold text-lg">Editar</h3>
-			<form class="flex flex-col" action="/account/update" method="POST" enctype="multipart/form-data">
+			<form class="flex flex-col" action="/profile/update" method="POST" enctype="multipart/form-data">
 				<div class="md:flex mt-4 gap-x-6">
 					<div class="w-full grid grid-cols-1 gap-6 sm:grid-cols-2">
 						<div>
@@ -80,18 +80,34 @@
 <script>
 	{% if passwordMessage %}
 		Toastify({
-		text: "{{ passwordMessage }}",
-		duration: 3000,
-		newWindow: true,
-		close: true,
-		gravity: "top", // `top` o `bottom`
-		position: 'right', // `left`, `center` o `right`
-		stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
-		style: {
-		background: "rgb(187 247 208)",
-		color: "rgb(34 197 94)",
-		borderRadius: "10px"
-		}
+			text: "{{ passwordMessage }}",
+			duration: 3000,
+			newWindow: true,
+			close: true,
+			gravity: "top", // `top` o `bottom`
+			position: 'right', // `left`, `center` o `right`
+			stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
+			style: {
+				background: "rgb(187 247 208)",
+				color: "rgb(34 197 94)",
+				borderRadius: "10px"
+			}
+		}).showToast();
+	{% endif %}
+	{% if profileMessage %}
+		Toastify({
+			text: "{{ profileMessage }}",
+			duration: 3000,
+			newWindow: true,
+			close: true,
+			gravity: "top", // `top` o `bottom`
+			position: 'right', // `left`, `center` o `right`
+			stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
+			style: {
+				background: "rgb(187 247 208)",
+				color: "rgb(34 197 94)",
+				borderRadius: "10px"
+			}
 		}).showToast();
 	{% endif %}
 </script>

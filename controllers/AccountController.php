@@ -1,5 +1,4 @@
 <?php
-
 class AccountController
 {
   private $twig;
@@ -13,19 +12,19 @@ class AccountController
 
   public function editAccount()
   {
-    // Obtener información del usuario actual
-    $username = $_SESSION['username'];
-    $avatar_fallback = substr($username, 0, 2);
     $currentUrl = $_SERVER['REQUEST_URI'];
     $userId = $_SESSION['id'];
     $user = User::getUserById($userId, $this->db);
     $userData = $user[0];
-    $avatar_fallback = substr($username, 0, 2);
 
     // Obtener información del formulario
     $first_name = $userData['first_name'];
     $last_name = $userData['last_name'];
     $email = $userData['email'];
+
+    // Obtener las 2 primeras letras del nombre
+    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
+    $avatar_fallback = substr($full_name, 0, 2);
 
     $passwordMessage = '';
     if (isset($_SESSION['password_success'])) {
@@ -36,24 +35,30 @@ class AccountController
       unset($_SESSION['password_error']);
     }
 
+    $profileMessage = '';
+    if (isset($_SESSION['profile_success'])) {
+      $profileMessage = $_SESSION['profile_success'];
+      unset($_SESSION['profile_success']);
+    } else if (isset($_SESSION['profile_error'])) {
+      $profileMessage = $_SESSION['profile_error'];
+      unset($_SESSION['profile_error']);
+    }
+
     echo $this->twig->render('profile.twig', [
       'user' => $userData,  // Pass the entire user data for reference
-      'username' => $username,
+      'full_name' => $full_name,
       'avatar' => $avatar_fallback,
       'currentUrl' => $currentUrl,
       'first_name' => $first_name,
       'last_name' => $last_name,
       'email' => $email,
       'passwordMessage' => $passwordMessage,
-      'avatar' => $avatar_fallback
+      'profileMessage' => $profileMessage
     ]);
   }
 
-  public function updateAccount()
-  {
+  public function updateAccount() {
     // Obtener información del usuario actual
-    $username = $_SESSION['username'];
-    $avatar_fallback = substr($username, 0, 2);
     $userId = $_SESSION['id'];
     $user = User::getUserById($userId, $this->db);
 
@@ -61,16 +66,29 @@ class AccountController
     $first_name = $_POST['first_name'];
     $last_name = $_POST['last_name'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
-    $password_confirmation = $_POST['password_confirmation'];
+
+    // Obtener las 2 primeras letras del nombre
+    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
+    $avatar_fallback = substr($full_name, 0, 2);
 
     // Validar que el nombre no esté vacío
-    if (empty($name)) {
+    if (empty($first_name)) {
       echo $this->twig->render('profile.twig', [
         'user' => $user,
-        'username' => $username,
+        'full_name' => $full_name,
         'avatar' => $avatar_fallback,
         'error' => 'El nombre no puede estar vacío'
+      ]);
+      return;
+    }
+
+    // Validar que el apellido no esté vacío
+    if (empty($last_name)) {
+      echo $this->twig->render('profile.twig', [
+        'user' => $user,
+        'full_name' => $full_name,
+        'avatar' => $avatar_fallback,
+        'error' => 'El apellido no puede estar vacío'
       ]);
       return;
     }
@@ -79,7 +97,7 @@ class AccountController
     if (empty($email)) {
       echo $this->twig->render('profile.twig', [
         'user' => $user,
-        'username' => $username,
+        'full_name' => $full_name,
         'avatar' => $avatar_fallback,
         'error' => 'El email no puede estar vacío'
       ]);
@@ -90,52 +108,24 @@ class AccountController
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
       echo $this->twig->render('profile.twig', [
         'user' => $user,
-        'username' => $username,
+        'full_name' => $full_name,
         'avatar' => $avatar_fallback,
         'error' => 'El email no es válido'
       ]);
       return;
     }
 
-    // Validar que la contraseña no esté vacía
-    if (empty($password)) {
-      echo $this->twig->render('profile.twig', [
-        'user' => $user,
-        'username' => $username,
-        'avatar' => $avatar_fallback,
-        'error' => 'La contraseña no puede estar vacía'
-      ]);
-      return;
-    }
-
-    // Validar que la contraseña tenga al menos 6 caracteres
-    if (strlen($password) < 6) {
-      echo $this->twig
-        ->render('profile.twig', [
-          'user' => $user,
-          'username' => $username,
-          'avatar' => $avatar_fallback,
-          'error' => 'La contraseña debe tener al menos 6 caracteres'
-        ]);
-      return;
-    }
-
-    // Validar que la contraseña y la confirmación sean iguales
-    if ($password !== $password_confirmation) {
-      echo $this->twig->render('profile.twig', [
-        'user' => $user,
-        'username' => $username,
-        'avatar' => $avatar_fallback,
-        'error' => 'La contraseña y la confirmación no coinciden'
-      ]);
-      return;
-    }
-
     // Actualizar el usuario en la base de datos
-    User::updateUser($userId, $first_name, $last_name, $email, $password, $this->db);
+    $result = User::updateUser($userId, $first_name, $last_name, $email, $this->db);
+
+    if ($result > 0) {
+      $_SESSION['profile_success'] = 'Usuario actualizado correctamente';
+    } else {
+      $_SESSION['profile_error'] = 'Error al actualizar el usuario';
+    }
 
     // Redirigir al usuario a la página de inicio
-    header('Location: /');
+    header('Location: /profile');
   }
 
   public function changePassword()

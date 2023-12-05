@@ -24,16 +24,21 @@ class User
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public static function updateUser($id, $db)
+  public static function updateUser($userId, $firstName, $lastName, $email, $db)
   {
     $db = $db->getConnection();
-    $stmt = $db->prepare('UPDATE users SET first_name = :first_name, last_name = :last_name, email = :email WHERE id = :id');
-    $stmt->execute([
-      'first_name' => $_POST['first_name'],
-      'last_name' => $_POST['last_name'],
-      'email' => $_POST['email'],
-      'id' => $id
-    ]);
+    // Preparar la consulta SQL
+    $stmt = $db->prepare("UPDATE users SET first_name = :first_name, last_name = :last_name, email = :email WHERE id = :id");
+
+    // Vincular los parámetros
+    $stmt->bindParam(':first_name', $firstName);
+    $stmt->bindParam(':last_name', $lastName);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':id', $userId);
+
+    // Ejecutar la consulta
+    $stmt->execute();
+    return $stmt->rowCount();
   }
 
   public function checkCredentials($username, $password)
