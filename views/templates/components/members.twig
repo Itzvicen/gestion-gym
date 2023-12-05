@@ -22,7 +22,7 @@
 					Añadir nuevo miembro
 				</button>
 				<form method="get" action="/dashboard/order">
-					<select name="by" class="px-5 py-2 text-sm font-medium text-gray-500 border rounded-md text-center">
+					<select name="by" class="px-5 py-2 text-sm font-medium text-gray-500 border rounded-md text-center" onchange="this.form.submit()">
 						<option value="default">Ordenar por</option>
 						<option value="recent">Más recientes</option>
 						<option value="old">Más antiguos</option>

@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Email.php';
-
 class Training
 {
   private $db;
@@ -127,8 +125,20 @@ class Training
 
       $training = $stmt->fetch(PDO::FETCH_ASSOC);
 
-      // Enviar un email al miembro
-      Email::sendEmail($member, $training);
+      // Enviar mensaje de WhatsApp al miembro
+      // Crear una instancia de WhatsAppSender
+      $whatsappSender = new WhatsAppSender('https://graph.facebook.com/v18.0/176913302172866/messages', $_ENV['WHATSAPP_TOKEN']);
+
+      // Preparar los datos para el mensaje
+      $prefijo = '34';
+      $to = $prefijo . $member['phone']; // Asegúrate de que el número de teléfono esté en formato internacional completo
+      $firstName = $member['first_name'];
+      $lastName = $member['last_name'];
+      $className = $training['class_name'];
+      $classDays = $training['class_days'];
+
+      // Enviar el mensaje
+      $whatsappSender->sendAddedMessage($to, $firstName, $lastName, $className, $classDays);
 
       return true;
     }
@@ -144,6 +154,28 @@ class Training
       'trainingId' => $trainingId
     ]);
 
-    return $stmt->rowCount();
+    $rowsAffected = $stmt->rowCount();
+
+    if ( $rowsAffected > 0 ) {
+      // Obtener la información del miembro
+      $stmt = $db->prepare('SELECT * FROM members WHERE id = :memberId');
+      $stmt->execute([
+        'memberId' => $memberId
+      ]);
+      $member = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      $prefijo = '34';
+      $to = $prefijo . $member['phone'];
+      $firstName = $member['first_name'];
+      $lastName = $member['last_name'];
+
+      // Enviar mensaje de WhatsApp al miembro
+      $whatsappSender = new WhatsAppSender('https://graph.facebook.com/v18.0/176913302172866/messages', $_ENV['WHATSAPP_TOKEN']);
+      $whatsappSender->sendRemovedMessage($to, $firstName, $lastName);
+  
+      return $rowsAffected;
+    }
+
+    return false;
   }
 }

@@ -153,6 +153,14 @@ class Member
   public static function deleteMember($id, $db)
   {
     $db = $db->getConnection();
+
+    // Eliminar todos los pagos asociados al miembro
+    $stmt = $db->prepare("DELETE FROM payments WHERE member_id = :id");
+    $stmt->execute([
+      'id' => $id
+    ]);
+
+    // Eliminar el miembro
     $stmt = $db->prepare("DELETE FROM members WHERE id = :id");
     $stmt->execute([
       'id' => $id

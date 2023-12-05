@@ -69,6 +69,21 @@ class Payment {
     $stmt->execute();
   }
 
+  // Actualizar el estado de un pago
+  public static function updatePayment($db, $payment_id, $payment_status) {
+    $db = $db->getConnection();
+    $stmt = $db->prepare("
+      UPDATE payments
+      SET payment_status = :payment_status
+      WHERE id = :payment_id
+      ");
+    $stmt->bindParam(':payment_status', $payment_status);
+    $stmt->bindParam(':payment_id', $payment_id);
+    $stmt->execute();
+
+    return $stmt->rowCount();
+  }
+
   // Método estático para obtener todos los pagos por ordenacion
   public static function getOrderedPayments($order, $db) {
     $db = $db->getConnection();
@@ -112,5 +127,33 @@ class Payment {
     $unpaid_payments = $stmt->fetchColumn();
 
     return $unpaid_payments;
+  }
+
+  // Mandar recordatorio de pago al miembro por whatsapp
+  public static function sendPaymentReminder($db, $member_id, $paymentId) {
+    $db = $db->getConnection();
+    // Obtener el miembro
+    $stmt = $db->prepare("SELECT * FROM members WHERE id = :member_id");
+    $stmt->bindParam(':member_id', $member_id);
+    $stmt->execute();
+    $member = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Obtener información del pago
+    $stmt = $db->prepare("SELECT * FROM payments WHERE id = :payment_id");
+    $stmt->bindParam(':payment_id', $paymentId);
+    $stmt->execute();
+    $payment = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Enviar mensaje de WhatsApp al miembro
+    $prefijo = '34';
+    $to = $prefijo . $member['phone'];
+    $firstName = $member['first_name'];
+    $lastName = $member['last_name'];
+    $paymentAmount = $payment['amount'];
+
+    $whatsappSender = new WhatsAppSender('https://graph.facebook.com/v18.0/176913302172866/messages', $_ENV['WHATSAPP_TOKEN']);
+    $messageSent = $whatsappSender->sendPaymentReminder($to, $firstName, $lastName, $paymentAmount);
+
+    return $messageSent;
   }
 }

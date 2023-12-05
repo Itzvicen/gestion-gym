@@ -40,6 +40,6 @@ class Database {
     }
 
     // Evita la clonación del objeto
-    private function __clone() { 
+    private function __clone() {
     }
 }

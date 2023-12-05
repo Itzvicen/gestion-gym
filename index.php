@@ -11,6 +11,7 @@ require_once 'models/Member.php';
 require_once 'models/TokenCsrf.php';
 require_once 'models/Payment.php';
 require_once 'models/Training.php';
+require_once 'models/WhatsappSender.php';
 require_once 'controllers/LoginController.php';
 require_once 'controllers/DashboardController.php';
 require_once 'controllers/MemberEditController.php';
@@ -70,6 +71,13 @@ switch ($request) {
     break;
   case '/dashboard/payments/create':
     $paymentController->createPayment();
+    break;
+  case (preg_match("/^\/dashboard\/payments\/reminder\/(\d+)$/", $request, $matches) ? true : false):
+    $paymentController->sendPaymentReminder($matches[1]);
+    break;
+  // Actualizar estado de un pago
+  case (preg_match("/^\/dashboard\/payments\/update\/(\d+)$/", $request, $matches) && $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false):
+    $paymentController->updatePayment($matches[1]);
     break;
   case (preg_match("/^\/dashboard\/search/", $request) ? true : false):
     $dashboardController->searchMembers();
