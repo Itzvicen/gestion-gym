@@ -9,7 +9,7 @@
 
           <p class="mt-1.5 text-sm text-gray-500">
             <!-- Mostrar el ultimo inicio de sesion, hora y localizacion, e ip -->
-            Último inicio de sesión: {{last_login_time}}, {{last_login_location}} ({{last_login_ip}})
+            Último inicio de sesión: {{last_login}}
 
           </p>
         </div>
@@ -30,10 +30,3 @@
     </div>
   </div>
 </header>
-<script>
-document.getElementById('search').addEventListener('keyup', function(event) {
-    if (event.key === 'Enter') {
-        window.location.href = '/dashboard/search?query=' + encodeURIComponent(this.value);
-    }
-});
-</script>

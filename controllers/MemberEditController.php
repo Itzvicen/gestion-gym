@@ -24,6 +24,12 @@ class MemberEditController
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
+    // Informacion ultimo incio de sesion
+    $last_login_time = $this->session->get('last_login_time');
+    $last_login_ip = $this->session->get('last_login_ip');
+    $last_login_location = $this->session->get('last_login_location');
+    $last_login = $last_login_time . ' desde ' . $last_login_location . ' (' . $last_login_ip . ')';
+
     // Obtener información del miembro
     $member = Member::getMemberById($memberId, $this->db);
     $classes = Training::getTrainingsByMemberId($memberId, $this->db);
@@ -41,7 +47,8 @@ class MemberEditController
       'avatar' => $avatar_fallback,
       'full_name' => $full_name,
       'updateMessage' => $updateMessage,
-      'classes' => $classes
+      'classes' => $classes,
+      'last_login' => $last_login
     ]);
   }
 
@@ -90,7 +97,7 @@ class MemberEditController
         }
         return;
       }
-      
+
       // Array con los datos del miembro
       $memberData = [
         'first_name' => $first_name,

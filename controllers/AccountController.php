@@ -23,6 +23,12 @@ class AccountController
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
+    // Informacion ultimo incio de sesion
+    $last_login_time = $this->session->get('last_login_time');
+    $last_login_ip = $this->session->get('last_login_ip');
+    $last_login_location = $this->session->get('last_login_location');
+    $last_login = $last_login_time . ' desde ' . $last_login_location . ' (' . $last_login_ip . ')';
+
     $passwordMessage = $this->session->get('password_success') ?? $this->session->get('password_error') ?? '';
     $this->session->remove('password_success');
     $this->session->remove('password_error');
@@ -37,7 +43,8 @@ class AccountController
       'avatar' => $avatar_fallback,
       'currentUrl' => $currentUrl,
       'passwordMessage' => $passwordMessage,
-      'profileMessage' => $profileMessage
+      'profileMessage' => $profileMessage,
+      'last_login' => $last_login
     ]);
   }
 
@@ -56,13 +63,20 @@ class AccountController
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
+    // Informacion ultimo incio de sesion
+    $last_login_time = $this->session->get('last_login_time');
+    $last_login_ip = $this->session->get('last_login_ip');
+    $last_login_location = $this->session->get('last_login_location');
+    $last_login = $last_login_time . ' desde ' . $last_login_location . ' (' . $last_login_ip . ')';
+
     // Validar que el nombre no esté vacío
     if (empty($first_name)) {
       echo $this->twig->render('profile.twig', [
         'user' => $user,
         'full_name' => $full_name,
         'avatar' => $avatar_fallback,
-        'error' => 'El nombre no puede estar vacío'
+        'error' => 'El nombre no puede estar vacío',
+        'last_login' => $last_login
       ]);
       return;
     }
@@ -73,7 +87,8 @@ class AccountController
         'user' => $user,
         'full_name' => $full_name,
         'avatar' => $avatar_fallback,
-        'error' => 'El apellido no puede estar vacío'
+        'error' => 'El apellido no puede estar vacío',
+        'last_login' => $last_login
       ]);
       return;
     }
@@ -84,7 +99,8 @@ class AccountController
         'user' => $user,
         'full_name' => $full_name,
         'avatar' => $avatar_fallback,
-        'error' => 'El email no puede estar vacío'
+        'error' => 'El email no puede estar vacío',
+        'last_login' => $last_login
       ]);
       return;
     }
@@ -95,7 +111,8 @@ class AccountController
         'user' => $user,
         'full_name' => $full_name,
         'avatar' => $avatar_fallback,
-        'error' => 'El email no es válido'
+        'error' => 'El email no es válido',
+        'last_login' => $last_login
       ]);
       return;
     }

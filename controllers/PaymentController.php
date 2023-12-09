@@ -28,6 +28,12 @@ class PaymentController
     // Obtener las 2 primeras letras del nombre
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
+    
+    // Informacion ultimo incio de sesion
+    $last_login_time = $this->session->get('last_login_time');
+    $last_login_ip = $this->session->get('last_login_ip');
+    $last_login_location = $this->session->get('last_login_location');
+    $last_login = $last_login_time . ' desde ' . $last_login_location . ' (' . $last_login_ip . ')';
 
     // Mensajes de Whatsapp y actualización de pagos
     $whatsappSendMessage = $this->session->get('whatsapp_send') ?? $this->session->get('whatsapp_send_error') ?? '';
@@ -45,7 +51,8 @@ class PaymentController
       'members' => $members,
       'avatar' => $avatar_fallback,
       'whatsappSendMessage' => $whatsappSendMessage,
-      'paymentUpdatedMessage' => $paymentUpdatedMessage
+      'paymentUpdatedMessage' => $paymentUpdatedMessage,
+      'last_login' => $last_login
     ]);
   }
 
@@ -88,12 +95,19 @@ class PaymentController
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
+    // Informacion ultimo incio de sesion
+    $last_login_time = $this->session->get('last_login_time');
+    $last_login_ip = $this->session->get('last_login_ip');
+    $last_login_location = $this->session->get('last_login_location');
+    $last_login = $last_login_time . ' desde ' . $last_login_location . ' (' . $last_login_ip . ')';
+
     echo $this->twig->render('payments.twig', [
       'payments' => $payments,
       'full_name' => $full_name,
       'avatar' => $avatar_fallback,
       'currentUrl' => $currentUrl,
-      'members' => $members
+      'members' => $members,
+      'last_login' => $last_login
     ]);
   }
 

@@ -44,6 +44,7 @@ class DashboardController
     $last_login_time = $this->session->get('last_login_time');
     $last_login_ip = $this->session->get('last_login_ip');
     $last_login_location = $this->session->get('last_login_location');
+    $last_login = $last_login_time . ' desde ' . $last_login_location . ' (' . $last_login_ip . ')';
 
     $deleteMessage = $this->session->get('delete_success') ?? $this->session->get('delete_error') ?? '';
     $this->session->remove('delete_success');
@@ -65,9 +66,7 @@ class DashboardController
       'currentUrl' => $currentUrl,
       'deleteMessage' => $deleteMessage,
       'createMessage' => $createMessage,
-      'last_login_time' => $last_login_time,
-      'last_login_ip' => $last_login_ip,
-      'last_login_location' => $last_login_location
+      'last_login' => $last_login
     ]);
   }
 
@@ -101,6 +100,7 @@ class DashboardController
     $last_login_time = $this->session->get('last_login_time');
     $last_login_ip = $this->session->get('last_login_ip');
     $last_login_location = $this->session->get('last_login_location');
+    $last_login = $last_login_time . ' desde ' . $last_login_location . ' (' . $last_login_ip . ')';
 
     echo $this->twig->render('dashboard.twig', [
       'avatar' => $avatar_fallback,
@@ -113,9 +113,7 @@ class DashboardController
       'currentUrl' => $currentUrl,
       'isSearching' => $isSearching,
       'searchQuery' => $_GET['query'] ?? '',
-      'last_login_time' => $last_login_time,
-      'last_login_ip' => $last_login_ip,
-      'last_login_location' => $last_login_location
+      'last_login' => $last_login
     ]);
   }
 
@@ -147,6 +145,12 @@ class DashboardController
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
+    // Informacion ultimo incio de sesion
+    $last_login_time = $this->session->get('last_login_time');
+    $last_login_ip = $this->session->get('last_login_ip');
+    $last_login_location = $this->session->get('last_login_location');
+    $last_login = $last_login_time . ' desde ' . $last_login_location . ' (' . $last_login_ip . ')';
+
     echo $this->twig->render('dashboard.twig', [
       'avatar' => $avatar_fallback,
       'full_name' => $full_name,
@@ -156,7 +160,8 @@ class DashboardController
       'unpaid_payments' => $unpaid_payments,
       'members' => $members,
       'currentUrl' => $currentUrl,
-      'order' => $order
+      'order' => $order,
+      'last_login' => $last_login
     ]);
   }
 }

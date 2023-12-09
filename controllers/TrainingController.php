@@ -28,7 +28,13 @@ class TrainingController
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
-    $trainingDeleteMessaje = $this->session->get('training_delete_sucess') ?? $this->session->get('training_delete_error') ?? '';
+    // Informacion ultimo incio de sesion
+    $last_login_time = $this->session->get('last_login_time');
+    $last_login_ip = $this->session->get('last_login_ip');
+    $last_login_location = $this->session->get('last_login_location');
+    $last_login = $last_login_time . ' desde ' . $last_login_location . ' (' . $last_login_ip . ')';
+
+    $trainingDeleteMessage = $this->session->get('training_delete_sucess') ?? $this->session->get('training_delete_error') ?? '';
     $this->session->remove('training_delete_sucess', 'training_delete_error');
 
     echo $this->twig->render('trainings.twig', [
@@ -37,7 +43,8 @@ class TrainingController
       'currentUrl' => $currentUrl,
       'avatar' => $avatar_fallback,
       'trainings' => $trainings,
-      'trainingDeleteMessaje' => $trainingDeleteMessaje
+      'trainingDeleteMessage' => $trainingDeleteMessage,
+      'last_login' => $last_login
     ]);
   }
 
@@ -59,6 +66,12 @@ class TrainingController
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
+    // Informacion ultimo incio de sesion
+    $last_login_time = $this->session->get('last_login_time');
+    $last_login_ip = $this->session->get('last_login_ip');
+    $last_login_location = $this->session->get('last_login_location');
+    $last_login = $last_login_time . ' desde ' . $last_login_location . ' (' . $last_login_ip . ')';
+
     $memberAddClassMessage = $this->session->get('member_add_class_sucess') ?? $this->session->get('member_add_class_error') ?? '';
     $this->session->remove('member_add_class_sucess', 'member_add_class_error');
 
@@ -78,7 +91,8 @@ class TrainingController
       'allMembers' => $members,
       'memberAddClassMessage' => $memberAddClassMessage,
       'memberRemoveClassMessage' => $memberRemoveClassMessage,
-      'trainingUpdateMessage' => $trainingUpdateMessage
+      'trainingUpdateMessage' => $trainingUpdateMessage,
+      'last_login' => $last_login
     ]);
   }
 
