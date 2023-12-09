@@ -10,7 +10,7 @@
 							</label>
 							<select class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" name="member_id">
 								{% for member in members %}
-									<option value="{{ member.id }}">{{ member.first_name }} {{ member.last_name }}</option>
+									<option value="{{ member.getId }}">{{ member.getFirstName }} {{ member.getLastName }}</option>
 								{% endfor %}
 							</select>
 						</div>
@@ -51,16 +51,3 @@
 		</div>
 	</div>
 </div>
-<script>
-	var loadFile = function (event) {
-var output = document.getElementById('output');
-var dropzoneContainer = document.getElementById('dropzone-container');
-
-output.src = URL.createObjectURL(event.target.files[0]);
-output.onload = function () {
-URL.revokeObjectURL(output.src); // Libera la memoria de la URL
-};
-output.classList.remove('hidden'); // Muestra la imagen de vista previa
-dropzoneContainer.classList.add('hidden'); // Oculta el input de subida
-};
-</script>

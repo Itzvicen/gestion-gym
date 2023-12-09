@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Clase Member
+ *
+ * Contiene métodos estáticos para realizar operaciones relacionadas con los miembros, como obtener miembros ordenados, crear, actualizar y eliminar miembros, 
+ * buscar miembros por nombre, y obtener el número de miembros activos e inactivos.
+ *
+ */
 class Member
 {
   private $id;
@@ -70,26 +77,67 @@ class Member
     return $this->image_path;
   }
 
-  // Método estático para obtener todos los miembros
+  /**
+   * Obtiene todos los miembros de la base de datos.
+   *
+   * @param $db La conexión a la base de datos.
+   * @return array Los miembros obtenidos de la base de datos.
+   */
   public static function getAllMembers($db)
   {
     $db = $db->getConnection();
-    $stmt = $db->prepare('SELECT * FROM members');
+    $stmt = $db->prepare("SELECT * FROM members");
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $members = [];
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $members[] = new Member($row['id'], $row['first_name'], $row['last_name'], $row['email'], $row['phone'], $row['birth_date'], $row['registration_date'], $row['active'], $row['image_path']);
+    }
+
+    return $members;
   }
 
-  // Método estático para obtener un miembro por id
+  /**
+   * Obtiene un miembro por su id.
+   *
+   * @param int $memberId El id del miembro.
+   * @param $db La conexión a la base de datos.
+   * @return array El miembro obtenido de la base de datos.
+   */
   public static function getMemberById($memberId, $db)
   {
     $db = $db->getConnection();
-    $stmt = $db->prepare('SELECT * FROM members WHERE id = :id');
-    $stmt->bindParam(':id', $memberId, PDO::PARAM_INT);
-    $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt = $db->prepare("SELECT * FROM members WHERE id = :id");
+    $stmt->execute([
+      'id' => $memberId
+    ]);
+
+    $member = [];
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $member = new Member(
+        $row['id'],
+        $row['first_name'],
+        $row['last_name'],
+        $row['email'],
+        $row['phone'],
+        $row['birth_date'],
+        $row['registration_date'],
+        $row['active'],
+        $row['image_path']
+      );
+    }
+
+    return $member;
   }
-  
-  // Método estático para obtener todos los miembros por ordenacion
+
+  /**
+   * Método estático para obtener todos los miembros por ordenación.
+   *
+   * @param string $order El tipo de ordenación deseado ('recent', 'old', 'alphabetical').
+   * @param $db La conexión a la base de datos.
+   * @return array Un array con los datos de los miembros ordenados según el criterio especificado.
+   */
   public static function getOrderedMembers($order, $db)
   {
     $db = $db->getConnection();
@@ -108,10 +156,32 @@ class Member
         break;
     }
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $members = [];
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $members[] = new Member(
+        $row['id'],
+        $row['first_name'],
+        $row['last_name'],
+        $row['email'],
+        $row['phone'],
+        $row['birth_date'],
+        $row['registration_date'],
+        $row['active'],
+        $row['image_path']
+      );
+    }
+
+    return $members;
   }
 
-  // Método estático para crear un nuevo miembro
+  /**
+   * Método estático para crear un nuevo miembro.
+   *
+   * @param array $data Los datos del nuevo miembro.
+   * @param $db La conexión a la base de datos.
+   * @return int El ID del miembro creado.
+   */
   public static function createMember($data, $db)
   {
     $db = $db->getConnection();
@@ -130,7 +200,14 @@ class Member
     return $db->lastInsertId(); // Retorna el ID del miembro creado
   }
 
-  // Metodo  estatico para actualizar un miembro
+  /**
+   * Método estático para actualizar un miembro existente.
+   *
+   * @param int $id El ID del miembro a actualizar.
+   * @param array $data Los nuevos datos del miembro.
+   * @param $db La conexión a la base de datos.
+   * @return int El número de filas afectadas por la actualización.
+   */
   public static function updateMember($id, $data, $db)
   {
     $db = $db->getConnection();
@@ -150,7 +227,13 @@ class Member
     return $stmt->rowCount(); // Retorna el número de filas afectadas
   }
 
-  // Metodo estatico para eliminar un miembro
+  /**
+   * Método estático para eliminar un miembro.
+   *
+   * @param int $id El ID del miembro a eliminar.
+   * @param $db La conexión a la base de datos.
+   * @return int El número de filas afectadas por la eliminación.
+   */
   public static function deleteMember($id, $db)
   {
     $db = $db->getConnection();
@@ -170,17 +253,44 @@ class Member
     return $stmt->rowCount(); // Retorna el número de filas afectadas
   }
 
-  // Método estático para buscar miembros por nombre
+  /**
+   * Método estático para buscar miembros por nombre.
+   *
+   * @param string $query El nombre o parte del nombre a buscar.
+   * @param $db La conexión a la base de datos.
+   * @return array Un array con los datos de los miembros que coinciden con la búsqueda.
+   */
   public static function searchByName($query, $db)
   {
     $db = $db->getConnection();
     $stmt = $db->prepare("SELECT * FROM members WHERE first_name LIKE :query OR last_name LIKE :query");
     $stmt->bindValue(':query', '%' . $query . '%');
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $members = [];
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $members[] = new Member(
+        $row['id'],
+        $row['first_name'],
+        $row['last_name'],
+        $row['email'],
+        $row['phone'],
+        $row['birth_date'],
+        $row['registration_date'],
+        $row['active'],
+        $row['image_path']
+      );
+    }
+
+    return $members;
   }
 
-  // Metodo estatico para obtener miembros activos
+  /**
+   * Método estático para obtener el número de miembros activos.
+   *
+   * @param $db La conexión a la base de datos.
+   * @return int El número de miembros activos.
+   */
   public static function getActiveMembers($db)
   {
     $db = $db->getConnection();
@@ -191,7 +301,12 @@ class Member
     return $active_members;
   }
 
-  // Metodo estatico para obtener miembros inactivos
+  /**
+   * Método estático para obtener el número de miembros inactivos.
+   *
+   * @param $db La conexión a la base de datos.
+   * @return int El número de miembros inactivos.
+   */
   public static function getInactiveMembers($db)
   {
     $db = $db->getConnection();

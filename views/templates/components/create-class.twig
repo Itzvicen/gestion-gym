@@ -1,0 +1,64 @@
+<div id="modal" class="hidden absolute inset-0 z-50 bg-gray-600 bg-opacity-50">
+	<div class="flex items-center justify-center min-h-screen">
+		<div class="md:h-auto 2xl:w-[40%] md:w-[50%] w-full bg-[#F9FAFB] p-6 rounded-lg">
+			<h3 class="font-bold text-lg">Crear clase de entrenamiento</h3>
+			<form class="flex flex-col" action="/dashboard/trainings/create" method="POST">
+				<div class="mt-4 gap-x-6">
+					<div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+						<div>
+							<label class="text-gray-700" htmlfor="first_name">
+								Nombre de la clase
+							</label>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="class_name"/>
+						</div>
+						<div>
+							<label class="text-gray-700" htmlfor="last_name">
+								Instructor
+							</label>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="instructor"/>
+						</div>
+						<div>
+							<label class="text-gray-700" htmlfor="email">
+								Localización
+							</label>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="location" />
+						</div>
+						<div>
+							<label class="text-gray-700" htmlfor="phone">
+								Duración (minutos)
+							</label>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="class_duration" />
+						</div>
+						<div>
+							<label class="text-gray-700" htmlfor="registration_date">
+								Dias de clase
+							</label>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="class_days" />
+						</div>
+						<div>
+							<label class="text-gray-700" htmlfor="registration_date">
+								Hora de inicio
+							</label>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="time" name="class_time" />
+						</div>
+						<div>
+							<label class="text-gray-700" htmlfor="birth_date">
+								Imagen de portada (URL)
+							</label>
+							<input class="block w-full px-4 py-2 mt-2 text-gray-700  bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring" type="text" name="poster_image" />
+						</div>
+					</div>
+				</div>
+
+				<div class="flex justify-end mt-8 gap-3">
+					<button type="submit" class="px-6 py-2 text-center text-gray-100 items-center inline-flex text-base leading-5 font-semibold rounded-md bg-black hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
+						Crear clase</i>
+					</button>
+					<button onclick="closeModal()" class="close px-6 py-2 text-center items-center inline-flex text-base leading-5 font-semibold rounded-md bg-red-100 text-red-800" type="button">
+						Cancelar
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

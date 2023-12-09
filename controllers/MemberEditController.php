@@ -19,47 +19,26 @@ class MemberEditController
     $user = User::getUserById($id, $this->db);
 
     // Obtener las 2 primeras letras del nombre
-    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
-    $avatar_fallback = substr($full_name, 0, 2);
+    $full_name = $user->getFirstName() . ' ' . $user->getLastName();
+    $avatar_fallback = $user->getInitials();
 
     // Obtener información del miembro
-    $memberData = Member::getMemberById($memberId, $this->db);
-
-    if (!$memberData) {
-      echo $this->twig->render('404.twig');
-      return;
-    }
-
-    $member = new Member(
-      $memberData['id'],
-      $memberData['first_name'],
-      $memberData['last_name'],
-      $memberData['email'],
-      $memberData['phone'],
-      $memberData['birth_date'],
-      $memberData['registration_date'],
-      $memberData['active'],
-      $memberData['image_path']
-    );
+    $member = Member::getMemberById($memberId, $this->db);
+    $classes = Training::getTrainingsByMemberId($memberId, $this->db);
 
     // Obtener pagos del miembro
     $payments = Payment::getPaymentsByMemberId($memberId, $this->db);
 
-    $updateMessage = '';
-    if (isset($_SESSION['update_success'])) {
-      $updateMessage = $_SESSION['update_success'];
-      unset($_SESSION['update_success']);
-    } else if (isset($_SESSION['update_error'])) {
-      $updateMessage = $_SESSION['update_error'];
-      unset($_SESSION['update_error']);
-    }
+    $updateMessage = $_SESSION['update_success'] ?? $_SESSION['update_error'] ?? '';
+    unset($_SESSION['update_success'], $_SESSION['update_error']);
 
-    echo $this->twig->render('edit_member.twig', [
+    echo $this->twig->render('edit-member.twig', [
       'member' => $member,
       'payments' => $payments,
       'avatar' => $avatar_fallback,
       'full_name' => $full_name,
-      'updateMessage' => $updateMessage
+      'updateMessage' => $updateMessage,
+      'classes' => $classes
     ]);
   }
 

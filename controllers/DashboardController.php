@@ -3,13 +3,11 @@
 class DashboardController
 {
   private $twig;
-  private $userModel;
   private $db;
 
-  public function __construct($twig, $userModel, $db)
+  public function __construct($twig, $db)
   {
     $this->twig = $twig;
-    $this->userModel = $userModel;
     $this->db = $db;
   }
 
@@ -37,27 +35,14 @@ class DashboardController
     $unpaid_payments = Payment::getUnpaidPayments($this->db);
 
     // Obtener las 2 primeras letras del nombre
-    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
-    $avatar_fallback = substr($full_name, 0, 2);
+    $full_name = $user->getFirstName() . ' ' . $user->getLastName();
+    $avatar_fallback = $user->getInitials();
 
+    $deleteMessage = $_SESSION['delete_success'] ?? $_SESSION['delete_error'] ?? '';
+    unset($_SESSION['delete_success'], $_SESSION['delete_error']);
 
-    $deleteMessage = '';
-    if (isset($_SESSION['delete_success'])) {
-      $deleteMessage = $_SESSION['delete_success'];
-      unset($_SESSION['delete_success']);
-    } else if (isset($_SESSION['delete_error'])) {
-      $deleteMessage = $_SESSION['delete_error'];
-      unset($_SESSION['delete_error']);
-    }
-
-    $createMessage = '';
-    if (isset($_SESSION['create_success'])) {
-      $createMessage = $_SESSION['create_success'];
-      unset($_SESSION['create_success']);
-    } else if (isset($_SESSION['create_error'])) {
-      $createMessage = $_SESSION['create_error'];
-      unset($_SESSION['create_error']);
-    }
+    $createMessage = $_SESSION['create_success'] ?? $_SESSION['create_error'] ?? '';
+    unset($_SESSION['create_success'], $_SESSION['create_error']);
 
 
     echo $this->twig->render('dashboard.twig', [
@@ -97,8 +82,8 @@ class DashboardController
     $members = Member::searchByName($searchQuery, $this->db);
 
     // Obtener las 2 primeras letras del nombre
-    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
-    $avatar_fallback = substr($full_name, 0, 2);
+    $full_name = $user->getFirstName() . ' ' . $user->getLastName();
+    $avatar_fallback = $user->getInitials();
 
     echo $this->twig->render('dashboard.twig', [
       'avatar' => $avatar_fallback,
@@ -139,8 +124,8 @@ class DashboardController
     $unpaid_payments = Payment::getUnpaidPayments($this->db);
 
     // Obtener las 2 primeras letras del nombre
-    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
-    $avatar_fallback = substr($full_name, 0, 2);
+    $full_name = $user->getFirstName() . ' ' . $user->getLastName();
+    $avatar_fallback = $user->getInitials();
 
     echo $this->twig->render('dashboard.twig', [
       'avatar' => $avatar_fallback,

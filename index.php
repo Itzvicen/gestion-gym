@@ -22,11 +22,10 @@ require_once 'controllers/AccountController.php';
 require_once 'controllers/TrainingController.php';
 
 // Crear instancias de modelos
-$userModel = new User($pdo);
 
 // Crear instancias de controladores
 $loginController = new LoginController($twig, $pdo);
-$dashboardController = new DashboardController($twig, $userModel, $db);
+$dashboardController = new DashboardController($twig, $db);
 $paymentController = new PaymentController($twig, $db);
 $memberEditController = new MemberEditController($twig, $db);
 $memberCreateController = new MemberCreateController($twig, $db);
@@ -75,10 +74,9 @@ switch ($request) {
   case (preg_match("/^\/dashboard\/search/", $request) ? true : false):
     $dashboardController->searchMembers();
     break;
-  case (preg_match("/^\/dashboard\/order/", $request) ? true : false):
+  case (preg_match("/^\/dashboard\/order/", $request) ?  true : false):
     $dashboardController->sortMembers();
     break;
-    // Ordenar pagos
   case (preg_match("/^\/dashboard\/payments\/order/", $request) ? true : false):
     $paymentController->sortPayments();
     break;
@@ -93,6 +91,15 @@ switch ($request) {
     break;
   case '/dashboard/trainings':
     $trainingController->index();
+    break;
+  case '/dashboard/trainings/create':
+    $trainingController->create();
+    break;
+  case (preg_match("/^\/dashboard\/trainings\/(\d+)\/delete$/", $request, $matches) ? true : false):
+    $trainingController->delete($matches[1]);
+    break;
+  case (preg_match("/^\/dashboard\/trainings\/(\d+)\/update$/", $request, $matches) && $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false):
+    $trainingController->update($matches[1]);
     break;
   case (preg_match("/^\/dashboard\/training\/(\d+)$/", $request, $matches) ? true : false):
     $trainingController->view($matches[1]);

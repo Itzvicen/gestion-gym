@@ -34,31 +34,31 @@
 		</thead>
 		<tbody class="divide-y divide-gray-200">
 			{% for payment in payments %}
+				{% set member = members|filter(member => member.getId() == payment.getMemberId())|first %}
 				<tr>
-					<td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">{{ payment.id }}</td>
+					<td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">{{ payment.getId() }}</td>
 					<td class="whitespace-nowrap px-4 py-2 text-gray-700 hover:text-blue-500 hover:underline">
-						<a href="/dashboard/edit/{{payment.member_id}}" class="hover:text-blue-500">
-							{{ payment.first_name }}
-							{{ payment.last_name }}
+						<a href="/dashboard/edit/{{payment.getMemberId()}}" class="hover:text-blue-500">
+							{{ member.getFirstName() }}
+							{{ member.getLastName() }}
 						</a>
 					</td>
-					<td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ payment.amount }}
-						€</td>
-					<td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ payment.payment_date|date('d/m/Y') }}</td>
-					<td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ payment.payment_method }}</td>
+					<td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ payment.getAmount() }} €</td>
+					<td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ payment.getPaymentDate()|date('d/m/Y') }}</td>
+					<td class="whitespace-nowrap px-4 py-2 text-gray-700">{{ payment.getPaymentMethod() }}</td>
 					<td class="whitespace-nowrap px-4 py-2 text-gray-700">
-						<form class="flex items-center justify-center gap-2" method="post" action="/dashboard/payments/update/{{payment.id}}">
-							<div class="w-3 h-3 rounded-full {{ payment.payment_status == 'Pagado' ? 'bg-green-400' : 'bg-orange-400' }}"></div>
+						<form class="flex items-center justify-center gap-2" method="post" action="/dashboard/payments/update/{{payment.getId()}}">
+							<div class="w-3 h-3 rounded-full {{ payment.getPaymentStatus() == 'Pagado' ? 'bg-green-400' : 'bg-orange-400' }}"></div>
 							<select name="payment_status" class="px-2 py-1 text-sm font-medium text-gray-500 border rounded-md text-center" onchange="this.form.submit()">
-								<option value="Impagado" {{ payment.payment_status == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
-								<option value="Pagado" {{ payment.payment_status == 'Pagado' ? 'selected' : '' }}>Pagado</option>
+								<option value="Impagado" {{ payment.getPaymentStatus() == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
+								<option value="Pagado" {{ payment.getPaymentStatus() == 'Pagado' ? 'selected' : '' }}>Pagado</option>
 							</select>
 						</form>
 					</td>
 					<td class="whitespace-nowrap px-4 py-2">
-						<form method="post" action="/dashboard/payments/reminder/{{payment.id}}">
-							<input type="hidden" name="member_id" value="{{ payment.member_id }}">
-							<button class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed " {{ payment.payment_status == 'Pagado' ? 'disabled' : '' }}>Enviar</button>
+						<form method="post" action="/dashboard/payments/reminder/{{payment.getId()}}">
+							<input type="hidden" name="member_id" value="{{ payment.getMemberId() }}">
+							<button class="inline-block rounded bg-indigo-600 px-4 py-2 text-xs font-medium text-white hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed " {{ payment.getPaymentStatus() == 'Pagado' ? 'disabled' : '' }}>Enviar</button>
 						</form>
 					</td>
 				</tr>

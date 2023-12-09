@@ -16,39 +16,30 @@ class PaymentController
     $id = $_SESSION['id'];
     $currentUrl = $_SERVER['REQUEST_URI'];
 
-    // Obtener infomarcion del usuario
+    // Obtener información del usuario
     $user = User::getUserById($id, $this->db);
     // Obtener los pagos
     $payments = Payment::getAllPayments($this->db);
+    // Obtener los miembros
     $members = Member::getAllMembers($this->db);
 
     // Obtener las 2 primeras letras del nombre
-    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
-    $avatar_fallback = substr($full_name, 0, 2);
-    $whatsappSendMessage = '';
-    if (isset($_SESSION['whatsapp_send'])) {
-      $whatsappSendMessage = $_SESSION['whatsapp_send'];
-      unset($_SESSION['whatsapp_send']);
-    } else if (isset($_SESSION['whatsapp_send_error'])) {
-      $whatsappSendMessage = $_SESSION['whatsapp_send_error'];
-      unset($_SESSION['whatsapp_send_error']);
-    }
+    $full_name = $user->getFirstName() . ' ' . $user->getLastName();
+    $avatar_fallback = $user->getInitials();
 
-    $paymentUpdatedMessage = '';
-    if (isset($_SESSION['payment_updated'])) {
-      $paymentUpdatedMessage = $_SESSION['payment_updated'];
-      unset($_SESSION['payment_updated']);
-    } else if (isset($_SESSION['payment_updated_error'])) {
-      $paymentUpdatedMessage = $_SESSION['payment_updated_error'];
-      unset($_SESSION['payment_updated_error']);
-    }
+    // Mensajes de Whatsapp y actualización de pagos
+    $whatsappSendMessage = $_SESSION['whatsapp_send'] ?? $_SESSION['whatsapp_send_error'] ?? '';
+    $paymentUpdatedMessage = $_SESSION['payment_updated'] ?? $_SESSION['payment_updated_error'] ?? '';
+
+    // Limpiar las variables de sesión
+    unset($_SESSION['whatsapp_send'], $_SESSION['whatsapp_send_error'], $_SESSION['payment_updated'], $_SESSION['payment_updated_error']);
 
     echo $this->twig->render('payments.twig', [
       'payments' => $payments,
       'full_name' => $full_name,
-      'avatar' => $avatar_fallback,
       'currentUrl' => $currentUrl,
       'members' => $members,
+      'avatar' => $avatar_fallback,
       'whatsappSendMessage' => $whatsappSendMessage,
       'paymentUpdatedMessage' => $paymentUpdatedMessage
     ]);
@@ -73,7 +64,7 @@ class PaymentController
       exit;
     } else {
       // Mostrar el formulario de creación de pagos
-      echo $this->twig->render('create_payment.twig');
+      echo $this->twig->render('create-payment.twig');
     }
   }
 
@@ -90,8 +81,8 @@ class PaymentController
     $members = Member::getAllMembers($this->db);
 
     // Obtener las 2 primeras letras del nombre
-    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
-    $avatar_fallback = substr($full_name, 0, 2);
+    $full_name = $user->getFirstName() . ' ' . $user->getLastName();
+    $avatar_fallback = $user->getInitials();
 
     echo $this->twig->render('payments.twig', [
       'payments' => $payments,
@@ -145,9 +136,6 @@ class PaymentController
       // Redirigir al usuario a la página de pagos
       header('Location: /dashboard/payments');
       exit;
-    } else {
-      // Mostrar el formulario de envío de recordatorio de pago
-      echo $this->twig->render('send_payment_reminder.twig');
     }
   }
 }

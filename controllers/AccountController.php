@@ -15,16 +15,10 @@ class AccountController
     $currentUrl = $_SERVER['REQUEST_URI'];
     $userId = $_SESSION['id'];
     $user = User::getUserById($userId, $this->db);
-    $userData = $user[0];
-
-    // Obtener información del formulario
-    $first_name = $userData['first_name'];
-    $last_name = $userData['last_name'];
-    $email = $userData['email'];
 
     // Obtener las 2 primeras letras del nombre
-    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
-    $avatar_fallback = substr($full_name, 0, 2);
+    $full_name = $user->getFirstName() . ' ' . $user->getLastName();
+    $avatar_fallback = $user->getInitials();
 
     $passwordMessage = '';
     if (isset($_SESSION['password_success'])) {
@@ -45,19 +39,17 @@ class AccountController
     }
 
     echo $this->twig->render('profile.twig', [
-      'user' => $userData,  // Pass the entire user data for reference
+      'user' => $user,  // Pass the entire user data for reference
       'full_name' => $full_name,
       'avatar' => $avatar_fallback,
       'currentUrl' => $currentUrl,
-      'first_name' => $first_name,
-      'last_name' => $last_name,
-      'email' => $email,
       'passwordMessage' => $passwordMessage,
       'profileMessage' => $profileMessage
     ]);
   }
 
-  public function updateAccount() {
+  public function updateAccount()
+  {
     // Obtener información del usuario actual
     $userId = $_SESSION['id'];
     $user = User::getUserById($userId, $this->db);
@@ -68,8 +60,8 @@ class AccountController
     $email = $_POST['email'];
 
     // Obtener las 2 primeras letras del nombre
-    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
-    $avatar_fallback = substr($full_name, 0, 2);
+    $full_name = $user->getFirstName() . ' ' . $user->getLastName();
+    $avatar_fallback = $user->getInitials();
 
     // Validar que el nombre no esté vacío
     if (empty($first_name)) {
@@ -139,10 +131,9 @@ class AccountController
       // Obtener la información del usuario actual
       $userId = $_SESSION['id'];
       $user = User::getUserById($userId, $this->db);
-      $userData = $user[0];
 
       // Verificar que la contraseña actual sea correcta
-      if (!password_verify($current_password, $userData['password'])) {
+      if (!password_verify($current_password, $user->getPassword())) {
         $_SESSION['password_error'] = 'La contraseña actual es incorrecta';
         header('Location: /profile');
         exit;

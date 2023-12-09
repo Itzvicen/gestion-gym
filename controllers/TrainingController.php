@@ -23,15 +23,19 @@ class TrainingController
     $trainings = Training::getAllTrainings($this->db);
 
     // Obtener las 2 primeras letras del nombre
-    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
-    $avatar_fallback = substr($full_name, 0, 2);
+    $full_name = $user->getFirstName() . ' ' . $user->getLastName();
+    $avatar_fallback = $user->getInitials();
+
+    $trainingDeleteMessaje = $_SESSION['training_delete_sucess'] ?? $_SESSION['training_delete_error'] ?? '';
+    unset($_SESSION['training_delete_sucess'], $_SESSION['training_delete_error']);
 
     echo $this->twig->render('trainings.twig', [
       'full_name' => $full_name,
       'avatar' => $avatar_fallback,
       'currentUrl' => $currentUrl,
       'avatar' => $avatar_fallback,
-      'trainings' => $trainings
+      'trainings' => $trainings,
+      'trainingDeleteMessaje' => $trainingDeleteMessaje
     ]);
   }
 
@@ -50,37 +54,29 @@ class TrainingController
     $members = Member::getAllMembers($this->db);
 
     // Obtener las 2 primeras letras del nombre
-    $full_name = $user[0]['first_name'] . ' ' . $user[0]['last_name'];
-    $avatar_fallback = substr($full_name, 0, 2);
+    $full_name = $user->getFirstName() . ' ' . $user->getLastName();
+    $avatar_fallback = $user->getInitials();
 
-    $memberAddClassMessaje = '';
-    if (isset($_SESSION['member_add_class_sucess'])) {
-      $memberAddClassMessaje = $_SESSION['member_add_class_sucess'];
-      unset($_SESSION['member_add_class_sucess']);
-    } else if (isset($_SESSION['member_add_class_error'])) {
-      $memberAddClassMessaje = $_SESSION['member_add_class_error'];
-      unset($_SESSION['member_add_class_error']);
-    }
+    $memberAddClassMessage = $_SESSION['member_add_class_sucess'] ?? $_SESSION['member_add_class_error'] ?? '';
+    unset($_SESSION['member_add_class_sucess'], $_SESSION['member_add_class_error']);
 
-    $memberRemoveClassMessaje = '';
-    if (isset($_SESSION['member_delete_class_sucess'])) {
-      $memberRemoveClassMessaje = $_SESSION['member_delete_class_sucess'];
-      unset($_SESSION['member_delete_class_sucess']);
-    } else if (isset($_SESSION['member_delete_class_error'])) {
-      $memberRemoveClassMessaje = $_SESSION['member_delete_class_error'];
-      unset($_SESSION['member_delete_class_error']);
-    }
+    $memberRemoveClassMessage = $_SESSION['member_delete_class_sucess'] ?? $_SESSION['member_delete_class_error'] ?? '';
+    unset($_SESSION['member_delete_class_sucess'], $_SESSION['member_delete_class_error']);
 
-    echo $this->twig->render('edit_training.twig', [
+    $trainingUpdateMessage = $_SESSION['training_update_sucess'] ?? $_SESSION['training_update_error'] ?? '';
+    unset($_SESSION['training_update_sucess'], $_SESSION['training_update_error']);
+
+    echo $this->twig->render('edit-training.twig', [
       'full_name' => $full_name,
       'avatar' => $avatar_fallback,
       'currentUrl' => $currentUrl,
       'avatar' => $avatar_fallback,
-      'training' => $training[0],
+      'training' => $training,
       'members' => $membersInClass,
       'allMembers' => $members,
-      'memberAddClassMessaje' => $memberAddClassMessaje,
-      'memberRemoveClassMessaje' => $memberRemoveClassMessaje
+      'memberAddClassMessage' => $memberAddClassMessage,
+      'memberRemoveClassMessage' => $memberRemoveClassMessage,
+      'trainingUpdateMessage' => $trainingUpdateMessage
     ]);
   }
 
@@ -115,5 +111,61 @@ class TrainingController
 
     // Redirige al usuario de vuelta a la página de edición de la clase
     header('Location: /dashboard/training/' . $classId);
+  }
+
+  public function create()
+  {
+    // Obtén los parámetros de la solicitud POST
+    $class_name = $_POST['class_name'];
+    $class_time = $_POST['class_time'];
+    $class_days = $_POST['class_days'];
+    $class_duration = $_POST['class_duration'];
+    $instructor = $_POST['instructor'];
+    $location = $_POST['location'];
+    $poster_image = $_POST['poster_image'];
+
+    // Llama a la función createTraining en el modelo Training
+    $trainingId = Training::createTraining($class_name, $class_days, $class_time, $class_duration, $instructor, $location, $poster_image, $this->db);
+
+    // Redirige al usuario a la página de visualización del entrenamiento recién creado
+    header('Location: /dashboard/training/' . $trainingId);
+  }
+
+  public function delete($classId)
+  {
+    $rowCount = Training::deleteTraining($classId, $this->db);
+
+    if ($rowCount > 0) {
+      $_SESSION['training_delete_sucess'] = 'Entrenamiento eliminado correctamente';
+    } else {
+      $_SESSION['training_delete_error'] = 'Error al eliminar el entrenamiento';
+    }
+
+    // Redirige al usuario a la página de visualización del entrenamiento recién creado
+    header('Location: /dashboard/trainings');
+  }
+
+  public function update($trainingId)
+  {
+    // Obtén los parámetros de la solicitud POST
+    $class_name = $_POST['class_name'];
+    $class_time = $_POST['class_time'];
+    $class_days = $_POST['class_days'];
+    $class_duration = $_POST['class_duration'];
+    $instructor = $_POST['instructor'];
+    $location = $_POST['location'];
+    $poster_image = $_POST['poster_image'];
+
+    // Llama a la función updateTraining en el modelo Training
+    $rowCount = Training::updateTraining($trainingId, $class_name, $class_days, $class_duration, $class_time,  $instructor, $location, $poster_image, $this->db);
+
+    if ($rowCount > 0) {
+      $_SESSION['training_update_sucess'] = 'Entrenamiento actualizado correctamente';
+    } else {
+      $_SESSION['training_update_error'] = 'Error al actualizar el entrenamiento';
+    }
+
+    // Redirige al usuario a la página de visualización del entrenamiento actualizado
+    header('Location: /dashboard/training/' . $trainingId);
   }
 }
