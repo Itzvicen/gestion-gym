@@ -4,12 +4,13 @@
       <div class="flex items-center gap-4 w-[60%]">
         <div class="mt-1">
           <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">
-            ¡Bienvenido, {{full_name}}!
+            ¡Bienvenido, {{full_name}}! 👋🏻
           </h1>
 
           <p class="mt-1.5 text-sm text-gray-500">
-            Your website has seen a 52% increase in traffic in the last month. Keep
-            it up! 🚀
+            <!-- Mostrar el ultimo inicio de sesion, hora y localizacion, e ip -->
+            Último inicio de sesión: {{last_login_time}}, {{last_login_location}} ({{last_login_ip}})
+
           </p>
         </div>
       </div>

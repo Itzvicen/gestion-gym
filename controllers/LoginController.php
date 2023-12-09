@@ -15,6 +15,17 @@ class LoginController
 
   public function index()
   {
+    // Obtener la ubicacion del usuario por su IP
+    function getGeoLocation($ip) {
+      $url = "http://ip-api.com/json/{$ip}";
+      $json = file_get_contents($url);
+      $data = json_decode($json);
+      $city = property_exists($data, 'city') ? $data->city : 'Desconocido';
+      $region = property_exists($data, 'regionName') ? $data->region : 'Desconocido';
+      $countryCode = property_exists($data, 'countryCode') ? $data->countryCode : 'Desconocido';
+      return $city . ', ' . $region . ', ' . $countryCode;
+    }
+
     $token = CsrfToken::generateToken();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -34,6 +45,9 @@ class LoginController
         $this->session->set('last_name', $result['last_name']);
         $this->session->set('role', $result['role']);
         $this->session->set('email', $result['email']);
+        $this->session->set('last_login_time', date('H:i:s'));
+        $this->session->set('last_login_ip', $_SERVER['REMOTE_ADDR']);
+        $this->session->set('last_login_location', getGeoLocation($_SERVER['REMOTE_ADDR']));
         header('Location: /dashboard');
         exit;
       } else {

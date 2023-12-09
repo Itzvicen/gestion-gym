@@ -40,6 +40,11 @@ class DashboardController
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
+    // Informacion ultimo incio de sesion
+    $last_login_time = $this->session->get('last_login_time');
+    $last_login_ip = $this->session->get('last_login_ip');
+    $last_login_location = $this->session->get('last_login_location');
+
     $deleteMessage = $this->session->get('delete_success') ?? $this->session->get('delete_error') ?? '';
     $this->session->remove('delete_success');
     $this->session->remove('delete_error');
@@ -59,7 +64,10 @@ class DashboardController
       'members' => $members,
       'currentUrl' => $currentUrl,
       'deleteMessage' => $deleteMessage,
-      'createMessage' => $createMessage
+      'createMessage' => $createMessage,
+      'last_login_time' => $last_login_time,
+      'last_login_ip' => $last_login_ip,
+      'last_login_location' => $last_login_location
     ]);
   }
 
@@ -89,6 +97,11 @@ class DashboardController
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
+    // Informacion ultimo incio de sesion
+    $last_login_time = $this->session->get('last_login_time');
+    $last_login_ip = $this->session->get('last_login_ip');
+    $last_login_location = $this->session->get('last_login_location');
+
     echo $this->twig->render('dashboard.twig', [
       'avatar' => $avatar_fallback,
       'full_name' => $full_name,
@@ -99,7 +112,10 @@ class DashboardController
       'members' => $members,
       'currentUrl' => $currentUrl,
       'isSearching' => $isSearching,
-      'searchQuery' => $_GET['query'] ?? ''
+      'searchQuery' => $_GET['query'] ?? '',
+      'last_login_time' => $last_login_time,
+      'last_login_ip' => $last_login_ip,
+      'last_login_location' => $last_login_location
     ]);
   }
 
