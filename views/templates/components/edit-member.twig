@@ -25,16 +25,28 @@
 												o arrastra<br/>
 												y suelta</p>
 											<p class="text-xs text-gray-500 dark:text-gray-400 text-center">PNG, JPG or GIF
-												<br/>
+												<br  />
 												(MAX. 800x400px)</p>
 										</div>
 									</label>
 									<input id="dropzone-file" class="hidden" type="file" name="image" onchange="loadFile(event)"/>
-								{% else %}
-									<div id="dropzone-container" class="hidden"></div>
 								{% endif %}
 							</div>
 							<img id="output" src="{% if member.getImagePath != 'uploads/pictures/default.png' %}../../{{ member.getImagePath }}{% endif %}" alt="Imagen de vista previa" class="w-full h-[248px] rounded-md object-cover {% if member.getImagePath == 'uploads/pictures/default.png' %}hidden{% endif %}"/>
+							{% if member.getImagePath != 'uploads/pictures/default.png' %}
+								<div id="dropzone-container" class="hidden"></div>
+								<label for="dropzone-file" class="flex mt-5 flex-col items-center justify-center w-full h-[60px] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50  hover:bg-gray-100 ">
+									<div class="flex items-center justify-center gap-2 pt-5 pb-4">
+										<svg aria-hidden="true" class="w-8 h-8 mb-1 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+										</svg>
+										<p class="text-xs text-gray-500 text-center">PNG, JPG or GIF
+											<br>
+											(MAX. 800x400px)</p>
+									</div>
+									<input id="dropzone-file" class="hidden" type="file" name="image" onchange="loadFile(event)"/>
+								</label>
+							{% endif %}
 						</div>
 
 						<div class="md:w-2/3 grid grid-cols-1 gap-6 sm:grid-cols-2 md:mt-0 mt-4">
@@ -124,7 +136,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="mt-6 w-full bg-[#F9FAFB] p-6 rounded-lg">
 			<h3 class="font-bold text-lg">Clases inscritas</h3>
 			<div class="flex gap-2 pt-4 w-full">
@@ -134,7 +146,9 @@
 							<div class="py-2 font-medium text-gray-900">
 								{{ class.getClassName }}
 							</div>
-							<div class="hidden md:block py-2 text-gray-700">{{ class.getLocation}} - {{ class.getClassTime }}</div>
+							<div class="hidden md:block py-2 text-gray-700">{{ class.getLocation}}
+								-
+								{{ class.getClassTime }}</div>
 							<div class="py-2 text-gray-700">{{ class.getInstructor }}</div>
 						</a>
 					{% endfor %}
@@ -147,19 +161,18 @@
 </div>
 <script>
 	{% if updateMessage %}
-		Toastify({
-			text: "{{ updateMessage }}",
-			duration: 3000,
-			newWindow: true,
-			close: true,
-			gravity: "top", // `top` o `bottom`
-			position: 'right', // `left`, `center` o `right`
-			stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
-			style: {
-				background: "rgb(187 247 208)",
-				color: "rgb(34 197 94)",
-				borderRadius: "10px"
-			}
-		}).showToast();
-	{% endif %}
+Toastify({
+text: "{{ updateMessage }}",
+duration: 3000,
+newWindow: true,
+close: true,
+gravity: "top", // `top` o `bottom`
+position: 'right', // `left`, `center` o `right`
+stopOnFocus: true, // Detiene el cierre automático al poner el cursor sobre el toast
+style: {
+background: "rgb(187 247 208)",
+color: "rgb(34 197 94)",
+borderRadius: "10px"
+}
+}).showToast();{% endif %}
 </script>

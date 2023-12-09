@@ -51,7 +51,8 @@ class MemberCreateController
     }
   }
 
-  private function handleImageUpload() {
+  private function handleImageUpload()
+  {
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
       $image = $_FILES['image'];
       $targetDir = "uploads/pictures/";

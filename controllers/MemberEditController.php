@@ -41,7 +41,6 @@ class MemberEditController
       'classes' => $classes
     ]);
   }
-
   public function update($memberId)
   {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -57,8 +56,37 @@ class MemberEditController
       $birth_date = $_POST['birth_date'];
       $active = $_POST['active'];
 
-      // Validar datos aquí...
+      // Validar datos
+      $errors = [];
 
+      $requiredFields = [
+        'first_name' => 'El nombre',
+        'last_name' => 'El apellido',
+        'email' => 'El correo electrónico',
+        'phone' => 'El teléfono',
+        'registration_date' => 'La fecha de registro',
+        'birth_date' => 'La fecha de nacimiento'
+      ];
+
+      foreach ($requiredFields as $field => $fieldName) {
+        if (empty($_POST[$field])) {
+          $errors[] = $fieldName . ' es requerido.';
+        }
+      }
+
+      // Validación adicional para el correo electrónico
+      if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = 'El correo electrónico no es válido.';
+      }
+
+      if (!empty($errors)) {
+        // Mostrar los errores al usuario
+        foreach ($errors as $error) {
+          echo $error . '<br>';
+        }
+        return;
+      }
+      
       // Array con los datos del miembro
       $memberData = [
         'first_name' => $first_name,
