@@ -4,16 +4,18 @@ class PaymentController
 {
   private $twig;
   private $db;
+  private $session;
 
   public function __construct($twig, $db)
   {
     $this->twig = $twig;
     $this->db = $db;
+    $this->session = Session::getInstance();
   }
 
   public function showPayments()
   {
-    $id = $_SESSION['id'];
+    $id = $this->session->get('id');
     $currentUrl = $_SERVER['REQUEST_URI'];
 
     // Obtener información del usuario
@@ -28,11 +30,13 @@ class PaymentController
     $avatar_fallback = $user->getInitials();
 
     // Mensajes de Whatsapp y actualización de pagos
-    $whatsappSendMessage = $_SESSION['whatsapp_send'] ?? $_SESSION['whatsapp_send_error'] ?? '';
-    $paymentUpdatedMessage = $_SESSION['payment_updated'] ?? $_SESSION['payment_updated_error'] ?? '';
+    $whatsappSendMessage = $this->session->get('whatsapp_send') ?? $this->session->get('whatsapp_send_error') ?? '';
+    $paymentUpdatedMessage = $this->session->get('payment_updated') ?? $this->session->get('payment_updated_error') ?? '';
 
-    // Limpiar las variables de sesión
-    unset($_SESSION['whatsapp_send'], $_SESSION['whatsapp_send_error'], $_SESSION['payment_updated'], $_SESSION['payment_updated_error']);
+    $this->session->remove('whatsapp_send');
+    $this->session->remove('whatsapp_send_error');
+    $this->session->remove('payment_updated');
+    $this->session->remove('payment_updated_error');
 
     echo $this->twig->render('payments.twig', [
       'payments' => $payments,
@@ -70,7 +74,7 @@ class PaymentController
 
   public function sortPayments()
   {
-    $id = $_SESSION['id'];
+    $id = $this->session->get('id');
     $currentUrl = $_SERVER['REQUEST_URI'];
     $order = $_GET['by'] ?? 'default';
 
@@ -99,15 +103,13 @@ class PaymentController
       // Recoger los datos del formulario
       $payment_status = $_POST['payment_status'];
 
-      // Validar los datos aquí...
-
       // Actualizar el pago
       $rowCount = Payment::updatePayment($this->db, $paymentId, $payment_status);
 
       if ($rowCount > 0) {
-        $_SESSION['payment_updated'] = 'Estado del pago actualizado correctamente';
+        $this->session->set('payment_updated', 'Estado del pago actualizado correctamente');
       } else {
-        $_SESSION['payment_updated_error'] = 'Error al actualizar el pago';
+        $this->session->set('payment_updated_error', 'Error al actualizar el pago');
       }
 
       // Redirigir al usuario a la página de pagos
@@ -128,9 +130,9 @@ class PaymentController
       $result = Payment::sendPaymentReminder($this->db, $member_id, $paymentId);
 
       if ($result) {
-        $_SESSION['whatsapp_send'] = 'Recordatorio de pago enviado correctamente';
+        $this->session->set('whatsapp_send', 'Recordatorio de pago enviado correctamente');
       } else {
-        $_SESSION['whatsapp_send_error'] = 'Error al enviar el recordatorio de pago';
+        $this->session->set('whatsapp_send_error', 'Error al enviar el recordatorio de pago');
       }
 
       // Redirigir al usuario a la página de pagos

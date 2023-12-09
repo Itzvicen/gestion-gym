@@ -1,15 +1,16 @@
 <?php
-session_start();
 
 class LoginController
 {
   private $userModel;
   private $twig;
+  private $session;
 
   public function __construct($twig, $db)
   {
     $this->userModel = new User($db);
     $this->twig = $twig;
+    $this->session = Session::getInstance();
   }
 
   public function index()
@@ -27,12 +28,12 @@ class LoginController
       $result = $this->userModel->checkCredentials($username, $password);
 
       if ($result) {
-        $_SESSION['username'] = $username;
-        $_SESSION['id'] = $result['id'];
-        $_SESSION['first_name'] = $result['first_name'];
-        $_SESSION['last_name'] = $result['last_name'];
-        $_SESSION['role'] = $result['role'];
-        $_SESSION['email'] = $result['email'];
+        $this->session->set('username', $username);
+        $this->session->set('id', $result['id']);
+        $this->session->set('first_name', $result['first_name']);
+        $this->session->set('last_name', $result['last_name']);
+        $this->session->set('role', $result['role']);
+        $this->session->set('email', $result['email']);
         header('Location: /dashboard');
         exit;
       } else {

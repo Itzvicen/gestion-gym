@@ -4,17 +4,19 @@ class TrainingController
 {
   private $twig;
   private $db;
+  private $session;
 
   public function __construct($twig, $db)
   {
     $this->twig = $twig;
     $this->db = $db;
+    $this->session = Session::getInstance();
   }
 
   public function index()
   {
     // Obtener información del usuario actual
-    $id = $_SESSION['id'];
+    $id = $this->session->get('id');
     $currentUrl = $_SERVER['REQUEST_URI'];
 
     // Obtener infomarcion del usuario
@@ -26,8 +28,8 @@ class TrainingController
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
-    $trainingDeleteMessaje = $_SESSION['training_delete_sucess'] ?? $_SESSION['training_delete_error'] ?? '';
-    unset($_SESSION['training_delete_sucess'], $_SESSION['training_delete_error']);
+    $trainingDeleteMessaje = $this->session->get('training_delete_sucess') ?? $this->session->get('training_delete_error') ?? '';
+    $this->session->remove('training_delete_sucess', 'training_delete_error');
 
     echo $this->twig->render('trainings.twig', [
       'full_name' => $full_name,
@@ -41,7 +43,7 @@ class TrainingController
 
   public function view($trainingId)
   {
-    $id = $_SESSION['id'];
+    $id = $this->session->get('id');
     $currentUrl = $_SERVER['REQUEST_URI'];
 
     // Obtener infomarcion del usuario
@@ -57,14 +59,14 @@ class TrainingController
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
-    $memberAddClassMessage = $_SESSION['member_add_class_sucess'] ?? $_SESSION['member_add_class_error'] ?? '';
-    unset($_SESSION['member_add_class_sucess'], $_SESSION['member_add_class_error']);
+    $memberAddClassMessage = $this->session->get('member_add_class_sucess') ?? $this->session->get('member_add_class_error') ?? '';
+    $this->session->remove('member_add_class_sucess', 'member_add_class_error');
 
-    $memberRemoveClassMessage = $_SESSION['member_delete_class_sucess'] ?? $_SESSION['member_delete_class_error'] ?? '';
-    unset($_SESSION['member_delete_class_sucess'], $_SESSION['member_delete_class_error']);
+    $memberRemoveClassMessage = $this->session->get('member_delete_class_sucess') ?? $this->session->get('member_delete_class_error') ?? '';
+    $this->session->remove('member_delete_class_sucess', 'member_delete_class_error');
 
-    $trainingUpdateMessage = $_SESSION['training_update_sucess'] ?? $_SESSION['training_update_error'] ?? '';
-    unset($_SESSION['training_update_sucess'], $_SESSION['training_update_error']);
+    $trainingUpdateMessage = $this->session->get('training_update_sucess') ?? $this->session->get('training_update_error') ?? '';
+    $this->session->remove('training_update_sucess', 'training_update_error');
 
     echo $this->twig->render('edit-training.twig', [
       'full_name' => $full_name,
@@ -88,9 +90,9 @@ class TrainingController
     $result = Training::addMemberToTraining($memberId, $classId, $this->db);
 
     if ($result) {
-      $_SESSION['member_add_class_sucess'] = 'Miembro añadido a la clase correctamente';
+      $this->session->set('member_add_class_sucess', 'Miembro añadido a la clase correctamente');
     } else {
-      $_SESSION['member_add_class_error'] = 'Error al añadrir el miembro a la clase';
+      $this->session->set('member_add_class_error', 'Error al añadrir el miembro a la clase');
     }
 
     // Redirige al usuario de vuelta a la página de edición de la clase
@@ -104,9 +106,9 @@ class TrainingController
     $rowCount = Training::deleteMemberFromClass($memberId, $classId, $this->db);
 
     if ($rowCount > 0) {
-      $_SESSION['member_delete_class_sucess'] = 'Miembro eliminado de la clase correctamente';
+      $this->session->set('member_delete_class_sucess', 'Miembro eliminado de la clase correctamente');
     } else {
-      $_SESSION['member_delete_class_error'] = 'Error al eliminar el miembro de la clase';
+      $this->session->set('member_delete_class_error', 'Error al eliminar el miembro de la clase');
     }
 
     // Redirige al usuario de vuelta a la página de edición de la clase
@@ -136,9 +138,9 @@ class TrainingController
     $rowCount = Training::deleteTraining($classId, $this->db);
 
     if ($rowCount > 0) {
-      $_SESSION['training_delete_sucess'] = 'Entrenamiento eliminado correctamente';
+      $this->session->set('training_delete_sucess', 'Entrenamiento eliminado correctamente');
     } else {
-      $_SESSION['training_delete_error'] = 'Error al eliminar el entrenamiento';
+      $this->session->set('training_delete_error', 'Error al eliminar el entrenamiento');
     }
 
     // Redirige al usuario a la página de visualización del entrenamiento recién creado
@@ -160,9 +162,9 @@ class TrainingController
     $rowCount = Training::updateTraining($trainingId, $class_name, $class_days, $class_duration, $class_time,  $instructor, $location, $poster_image, $this->db);
 
     if ($rowCount > 0) {
-      $_SESSION['training_update_sucess'] = 'Entrenamiento actualizado correctamente';
+      $this->session->set('training_update_sucess', 'Entrenamiento actualizado correctamente');
     } else {
-      $_SESSION['training_update_error'] = 'Error al actualizar el entrenamiento';
+      $this->session->set('training_update_error', 'Error al actualizar el entrenamiento');
     }
 
     // Redirige al usuario a la página de visualización del entrenamiento actualizado

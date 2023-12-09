@@ -1,42 +1,35 @@
 <?php
+
 class AccountController
 {
   private $twig;
   private $db;
+  private $session;
 
   public function __construct($twig, $db)
   {
     $this->twig = $twig;
     $this->db = $db;
+    $this->session = Session::getInstance();
   }
 
   public function editAccount()
   {
     $currentUrl = $_SERVER['REQUEST_URI'];
-    $userId = $_SESSION['id'];
+    $userId = $this->session->get('id');
     $user = User::getUserById($userId, $this->db);
 
     // Obtener las 2 primeras letras del nombre
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
-    $passwordMessage = '';
-    if (isset($_SESSION['password_success'])) {
-      $passwordMessage = $_SESSION['password_success'];
-      unset($_SESSION['password_success']);
-    } else if (isset($_SESSION['password_error'])) {
-      $passwordMessage = $_SESSION['password_error'];
-      unset($_SESSION['password_error']);
-    }
+    $passwordMessage = $this->session->get('password_success') ?? $this->session->get('password_error') ?? '';
+    $this->session->remove('password_success');
+    $this->session->remove('password_error');
 
-    $profileMessage = '';
-    if (isset($_SESSION['profile_success'])) {
-      $profileMessage = $_SESSION['profile_success'];
-      unset($_SESSION['profile_success']);
-    } else if (isset($_SESSION['profile_error'])) {
-      $profileMessage = $_SESSION['profile_error'];
-      unset($_SESSION['profile_error']);
-    }
+    $profileMessage = $this->session->get('profile_success') ?? $this->session->get('profile_error') ?? '';
+    $this->session->remove('profile_success');
+    $this->session->remove('profile_error');
 
     echo $this->twig->render('profile.twig', [
       'user' => $user,  // Pass the entire user data for reference
@@ -111,9 +104,9 @@ class AccountController
     $result = User::updateUser($userId, $first_name, $last_name, $email, $this->db);
 
     if ($result > 0) {
-      $_SESSION['profile_success'] = 'Usuario actualizado correctamente';
+      $this->session->set('profile_success', 'Usuario actualizado correctamente');
     } else {
-      $_SESSION['profile_error'] = 'Error al actualizar el usuario';
+      $this->session->set('profile_error', 'Error al actualizar el usuario');
     }
 
     // Redirigir al usuario a la página de inicio
@@ -134,7 +127,7 @@ class AccountController
 
       // Verificar que la contraseña actual sea correcta
       if (!password_verify($current_password, $user->getPassword())) {
-        $_SESSION['password_error'] = 'La contraseña actual es incorrecta';
+        $this->session->set('password_error', 'La contraseña actual es incorrecta');
         header('Location: /profile');
         exit;
       }
@@ -150,9 +143,9 @@ class AccountController
       $result = User::updatePassword($userId, $new_password, $this->db);
 
       if ($result > 0) {
-        $_SESSION['password_success'] = 'Contraseña actualizada correctamente';
+        $this->session->set('password_success', 'Contraseña actualizada correctamente');
       } else {
-        $_SESSION['password_error'] = 'Error al actualizar la contraseña';
+        $this->session->set('password_error', 'Error al actualizar la contraseña');
       }
 
       // Redirigir al usuario a la página de perfil

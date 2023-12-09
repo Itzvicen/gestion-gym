@@ -1,9 +1,17 @@
 <?php
+class LogoutController
+{
+  private $session;
 
-class LogoutController {
-  public function logout() {
-      session_destroy();
-      header('Location: /');
-      exit;
+  public function __construct()
+  {
+    $this->session = Session::getInstance();
+  }
+
+  public function logout()
+  {
+    $this->session->destroy();
+    header('Location: /');
+    exit;
   }
 }

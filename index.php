@@ -1,9 +1,9 @@
 <?php
 // Incluir la configuración de la base de datos y Twig
-require_once 'config/database.php';
+require_once 'config/Database.php';
+require_once 'config/Session.php';
 $twig = require 'config/twig.php';
 $db = Database::getInstance();
-$pdo = $db->getConnection();
 
 // Incluir modelos y controladores
 require_once 'models/User.php';
@@ -21,10 +21,8 @@ require_once 'controllers/LogoutController.php';
 require_once 'controllers/AccountController.php';
 require_once 'controllers/TrainingController.php';
 
-// Crear instancias de modelos
-
 // Crear instancias de controladores
-$loginController = new LoginController($twig, $pdo);
+$loginController = new LoginController($twig, $db);
 $dashboardController = new DashboardController($twig, $db);
 $paymentController = new PaymentController($twig, $db);
 $memberEditController = new MemberEditController($twig, $db);
@@ -37,12 +35,17 @@ $logoutController = new LogoutController();
 $request = $_SERVER['REQUEST_URI'];
 
 switch ($request) {
+  // Ruta de logout
   case '/logout':
     $logoutController->logout();
     break;
+
+  // Ruta de login
   case '/':
     $loginController->index();
     break;
+
+  // Rutas de miembros
   case '/dashboard':
     $dashboardController->index();
     break;
@@ -52,12 +55,20 @@ switch ($request) {
   case '/dashboard/member/create':
     $memberCreateController->createMember();
     break;
+  case (preg_match("/^\/dashboard\/search/", $request) ? true : false):
+    $dashboardController->searchMembers();
+    break;
+  case (preg_match("/^\/dashboard\/order/", $request) ?  true : false):
+    $dashboardController->sortMembers();
+    break;
   case (preg_match("/^\/dashboard\/member\/(\d+)\/delete$/", $request, $matches) ? true : false):
     $memberEditController->delete($matches[1]);
     break;
   case (preg_match("/^\/dashboard\/member\/update\/(\d+)$/", $request, $matches) && $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false):
     $memberEditController->update($matches[1]);
     break;
+
+    // Rutas de pagos
   case '/dashboard/payments':
     $paymentController->showPayments();
     break;
@@ -67,19 +78,14 @@ switch ($request) {
   case (preg_match("/^\/dashboard\/payments\/reminder\/(\d+)$/", $request, $matches) ? true : false):
     $paymentController->sendPaymentReminder($matches[1]);
     break;
-  // Actualizar estado de un pago
   case (preg_match("/^\/dashboard\/payments\/update\/(\d+)$/", $request, $matches) && $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false):
     $paymentController->updatePayment($matches[1]);
-    break;
-  case (preg_match("/^\/dashboard\/search/", $request) ? true : false):
-    $dashboardController->searchMembers();
-    break;
-  case (preg_match("/^\/dashboard\/order/", $request) ?  true : false):
-    $dashboardController->sortMembers();
     break;
   case (preg_match("/^\/dashboard\/payments\/order/", $request) ? true : false):
     $paymentController->sortPayments();
     break;
+
+    // Rutas de perfil de usuario
   case '/profile':
     $accountController->editAccount();
     break;
@@ -89,6 +95,8 @@ switch ($request) {
   case (preg_match("/^\/profile\/change-password/", $request) && $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false):
     $accountController->changePassword();
     break;
+
+    // Rutas de clases de entrenamientos
   case '/dashboard/trainings':
     $trainingController->index();
     break;
@@ -110,6 +118,8 @@ switch ($request) {
   case (preg_match("/^\/dashboard\/training\/(\d+)\/remove-member$/", $request, $matches) && $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false):
     $trainingController->deleteMemberFromClass($matches[1]);
     break;
+
+    // Default página 404
   default:
     http_response_code(404);
     echo $twig->render('404.twig');

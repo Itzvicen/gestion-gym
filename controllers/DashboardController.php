@@ -4,21 +4,23 @@ class DashboardController
 {
   private $twig;
   private $db;
+  private $session;
 
   public function __construct($twig, $db)
   {
     $this->twig = $twig;
     $this->db = $db;
+    $this->session = Session::getInstance();
   }
 
   public function index()
   {
-    if (!isset($_SESSION['username'])) {
+    if (!$this->session->get('username')) {
       header('Location: /');
       exit;
     }
 
-    $id = $_SESSION['id'];
+    $id = $this->session->get('id');
     $currentUrl = $_SERVER['REQUEST_URI'];
 
     // Obtener infomarcion del usuario
@@ -38,11 +40,13 @@ class DashboardController
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
-    $deleteMessage = $_SESSION['delete_success'] ?? $_SESSION['delete_error'] ?? '';
-    unset($_SESSION['delete_success'], $_SESSION['delete_error']);
+    $deleteMessage = $this->session->get('delete_success') ?? $this->session->get('delete_error') ?? '';
+    $this->session->remove('delete_success');
+    $this->session->remove('delete_error');
 
-    $createMessage = $_SESSION['create_success'] ?? $_SESSION['create_error'] ?? '';
-    unset($_SESSION['create_success'], $_SESSION['create_error']);
+    $createMessage = $this->session->get('create_success') ?? $this->session->get('create_error') ?? '';
+    $this->session->remove('create_success');
+    $this->session->remove('create_error');
 
 
     echo $this->twig->render('dashboard.twig', [
@@ -64,7 +68,7 @@ class DashboardController
     $currentUrl = $_SERVER['REQUEST_URI'];
     $searchQuery = $_GET['query'] ?? '';
     $isSearching = !empty($_GET['query']);
-    $id = $_SESSION['id'];
+    $id = $this->session->get('id');
 
     // Obtener infomarcion del usuario
     $user = User::getUserById($id, $this->db);
@@ -101,12 +105,12 @@ class DashboardController
 
   public function sortMembers()
   {
-    if (!isset($_SESSION['username'])) {
+    if (!$this->session->get('username')) {
       header('Location: /');
       exit;
     }
 
-    $id = $_SESSION['id'];
+    $id = $this->session->get('id');
     $currentUrl = $_SERVER['REQUEST_URI'];
     $order = $_GET['by'] ?? 'default';
 

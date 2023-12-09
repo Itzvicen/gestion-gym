@@ -27,6 +27,7 @@ class Database {
         }
     }
 
+    // Obtener instancia de la base de datos
     public static function getInstance() {
         if (self::$instance == null) {
             self::$instance = new Database();
@@ -35,6 +36,7 @@ class Database {
         return self::$instance;
     }
 
+    // Obtener la conexión de la base de datos
     public function getConnection() {
         return $this->pdo;
     }

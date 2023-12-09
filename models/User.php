@@ -174,7 +174,8 @@ class User
    */
   public function checkCredentials($username, $password)
   {
-    $stmt = $this->db->prepare('SELECT * FROM users WHERE username = :username');
+    $db = $this->db->getConnection();
+    $stmt = $db->prepare('SELECT * FROM users WHERE username = :username');
     $stmt->execute(['username' => $username]);
     $user = $stmt->fetch();
 

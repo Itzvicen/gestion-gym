@@ -4,11 +4,13 @@ class MemberCreateController
 {
   private $twig;
   private $db;
+  private $session;
 
   public function __construct($twig, $db)
   {
     $this->twig = $twig;
     $this->db = $db;
+    $this->session = Session::getInstance();
   }
 
   public function createMember() {
@@ -41,9 +43,9 @@ class MemberCreateController
       $result = Member::createMember($memberData, $this->db);
 
       if ($result) {
-        $_SESSION['create_success'] = 'Miembro creado correctamente';
+        $this->session->set('create_success', 'Miembro creado correctamente');
       } else {
-        $_SESSION['create_error'] = 'Error al crear el miembro';
+        $this->session->set('create_error', 'Error al crear el miembro');
       }
 
       // Redirigir al usuario o mostrar un mensaje de éxito/error

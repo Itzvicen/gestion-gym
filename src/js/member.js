@@ -17,7 +17,18 @@ function loadFile(event) {
     // Muestra el segundo input
     document.getElementById('second-input').classList.remove('hidden');
   } else {
-    alert("Tipo de archivo no válido");
+    Toastify({
+      text: "Tipo de archivo no válido",
+      duration: 3000,
+      close: true,
+      gravity: "top", // `top` or `bottom`
+      position: 'right', // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "#fd1d1d",
+        borderRadius: "10px"
+      }
+    }).showToast();
   }
 }
 

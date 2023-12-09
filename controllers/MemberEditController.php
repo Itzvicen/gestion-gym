@@ -4,16 +4,18 @@ class MemberEditController
 {
   private $twig;
   private $db;
+  private $session;
 
   public function __construct($twig, $db)
   {
     $this->twig = $twig;
     $this->db = $db;
+    $this->session = Session::getInstance();
   }
 
   public function edit($memberId)
   {
-    $id = $_SESSION['id'];
+    $id = $this->session->get('id');
 
     // Obtener información del usuario
     $user = User::getUserById($id, $this->db);
@@ -29,8 +31,9 @@ class MemberEditController
     // Obtener pagos del miembro
     $payments = Payment::getPaymentsByMemberId($memberId, $this->db);
 
-    $updateMessage = $_SESSION['update_success'] ?? $_SESSION['update_error'] ?? '';
-    unset($_SESSION['update_success'], $_SESSION['update_error']);
+    $updateMessage = $this->session->get('update_success') ?? $this->session->get('update_error') ?? '';
+    $this->session->remove('update_success');
+    $this->session->remove('update_error');
 
     echo $this->twig->render('edit-member.twig', [
       'member' => $member,
@@ -41,6 +44,7 @@ class MemberEditController
       'classes' => $classes
     ]);
   }
+
   public function update($memberId)
   {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -103,9 +107,9 @@ class MemberEditController
       $success = Member::updateMember($memberId, $memberData, $this->db);
 
       if ($success) {
-        $_SESSION['update_success'] = 'Actualización realizada con éxito.';
+        $this->session->set('update_success', 'Actualización realizada con éxito.');
       } else {
-        $_SESSION['update_error'] = 'Error al actualizar.';
+        $this->session->set('update_error', 'Error al actualizar.');
       }
 
       // Redirigir o mostrar un mensaje de éxito
@@ -118,9 +122,9 @@ class MemberEditController
     $deleteCount = Member::deleteMember($memberId, $this->db);
 
     if ($deleteCount == 0) {
-      $_SESSION['delete_error'] = 'Error al eliminar.';
+      $this->session->set('delete_error', 'Error al eliminar.');
     } else {
-      $_SESSION['delete_success'] = 'Miembro eliminado con éxito.';
+      $this->session->set('delete_success', 'Miembro eliminado con éxito.');
     }
 
     header('Location: /dashboard');
