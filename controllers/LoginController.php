@@ -23,7 +23,7 @@ class LoginController
       $city = property_exists($data, 'city') ? $data->city : 'Desconocido';
       $region = property_exists($data, 'regionName') ? $data->region : 'Desconocido';
       $countryCode = property_exists($data, 'countryCode') ? $data->countryCode : 'Desconocido';
-      return $city . ', ' . $region . ', ' . $countryCode;
+      return $city . ', ' . $countryCode;
     }
 
     $token = CsrfToken::generateToken();
