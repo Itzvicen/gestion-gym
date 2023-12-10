@@ -11,8 +11,8 @@ Además de las funcionalidades mencionadas anteriormente, el Sistema de Gestión
 
 ## 🔐 Credenciales
 
-- Usuario: administrador
-- Contraseña: admin
+- Usuario: admin
+- Contraseña: 12345
 
 ## 🛠️ Tecnologías utilizadas
 
