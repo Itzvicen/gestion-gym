@@ -139,14 +139,14 @@
 
 		<div class="mt-6 w-full bg-[#F9FAFB] p-6 rounded-lg">
 			<h3 class="font-bold text-lg">Clases inscritas</h3>
-			<div class="flex gap-2 pt-4 w-full">
+			<div class="flex md:flex-row flex-col gap-2 pt-4 w-full">
 				{% if classes|length > 0 %}
 					{% for class in classes %}
-						<a href="/dashboard/training/{{ class.getId }}" class="w-[25%] p-4 bg-white rounded-lg divide-y-2 divide-gray-200 text-sm hover:outline hover:outline-slate-300">
+						<a href="/dashboard/training/{{ class.getId }}" class="md:w-[25%] p-4 bg-white rounded-lg divide-y-2 divide-gray-200 text-sm hover:outline hover:outline-slate-300">
 							<div class="py-2 font-medium text-gray-900">
 								{{ class.getClassName }}
 							</div>
-							<div class="hidden md:block py-2 text-gray-700">{{ class.getLocation}}
+							<div class="py-2 text-gray-700">{{ class.getLocation}}
 								-
 								{{ class.getClassTime }}</div>
 							<div class="py-2 text-gray-700">{{ class.getInstructor }}</div>
