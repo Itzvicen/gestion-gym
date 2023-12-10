@@ -11,20 +11,10 @@ Además de las funcionalidades mencionadas anteriormente, el Sistema de Gestión
 
 ## Funciones del Administrador
 
-El administrador de la aplicación web tiene la capacidad de gestionar los miembros del gimnasio de las siguientes maneras:
+El administrador tiene las siguientes capacidades:
 
-- **Ver la lista de miembros**: El administrador puede ver una lista completa de todos los miembros del gimnasio, incluyendo su información personal y su estado de membresía.
-
-- **Agregar nuevos miembros**: El administrador puede agregar nuevos miembros al gimnasio, ingresando su información personal y asignándoles una membresía.
-
-- **Editar la información de los miembros**: El administrador puede editar la información personal y la membresía de cualquier miembro del gimnasio.
-
-- **Eliminar miembros**: Si es necesario, el administrador puede eliminar a un miembro del gimnasio.
-
-- **Gestionar pagos de membresía**: El administrador puede ver y gestionar los pagos de membresía de cada miembro, incluyendo la visualización de un historial de pagos, la adición de nuevos pagos y la actualización del estado de los pagos.
-
-- **Cargar y mostrar imágenes de perfil**: Para cada miembro, el administrador puede cargar una imagen de perfil y mostrarla en la lista de miembros.
-
-Estas funciones permiten al administrador gestionar eficientemente los miembros del gimnasio y mantener un registro detallado de su información y su estado de membresía.
+- **Miembros**: Puede ver, agregar, editar y eliminar miembros.
+- **Pagos**: Puede gestionar el historial de pagos, incluyendo la adición de nuevos pagos y la actualización del estado de los pagos.
+- **Clases de entrenamiento**: Puede crear, editar y eliminar clases de entrenamiento.
   
 ### 👨🏼‍💻Desarrollador: Vicente Santiago Perea
