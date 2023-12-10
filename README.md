@@ -1,6 +1,6 @@
 # Sistema de Gestión de Miembros de Gimnasio 🏋️‍♀️
 
-![image](<img width="1440" alt="Captura de pantalla 2023-12-10 a las 2 05 33" src="https://github.com/Itzvicen/gestion-gym/assets/92974434/7ea572f6-196a-4dac-a1a5-c598851e5b91">)
+![image](https://github.com/Itzvicen/gestion-gym/assets/92974434/7ea572f6-196a-4dac-a1a5-c598851e5b91")
 
 Pruebalo ahora: https://gym.vicentesantiago.tech
 
