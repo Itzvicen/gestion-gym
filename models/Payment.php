@@ -135,15 +135,16 @@ class Payment
    * @param string $payment_status El estado del pago.
    * @return void
    */
-  public static function createPayment($db, $member_id, $amount, $payment_method, $payment_status)
+  public static function createPayment($db, $member_id, $amount, $payment_date, $payment_method, $payment_status)
   {
     $db = $db->getConnection();
     $stmt = $db->prepare("
-        INSERT INTO payments (member_id, amount, payment_method, payment_status) 
-        VALUES (:member_id, :amount, :payment_method, :payment_status)
+        INSERT INTO payments (member_id, amount, payment_date, payment_method, payment_status)
+        VALUES (:member_id, :amount, :payment_date, :payment_method, :payment_status)
         ");
     $stmt->bindParam(':member_id', $member_id);
     $stmt->bindParam(':amount', $amount);
+    $stmt->bindParam(':payment_date', $payment_date);
     $stmt->bindParam(':payment_method', $payment_method);
     $stmt->bindParam(':payment_status', $payment_status);
     $stmt->execute();

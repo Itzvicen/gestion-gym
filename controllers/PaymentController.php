@@ -62,13 +62,13 @@ class PaymentController
       // Recoger los datos del formulario
       $member_id = $_POST['member_id'];
       $amount = $_POST['amount'];
+      // Fecha actual al crear el pago
+      $payment_date = date('Y-m-d');
       $payment_method = $_POST['payment_method'];
       $payment_status = $_POST['payment_status'];
 
-      // Validar los datos aquí...
-
       // Crear el pago
-      Payment::createPayment($this->db, $member_id, $amount, $payment_method, $payment_status);
+      Payment::createPayment($this->db, $member_id, $amount, $payment_date, $payment_method, $payment_status);
 
       // Redirigir al usuario a la página de pagos
       header('Location: /dashboard/payments');

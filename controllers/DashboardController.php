@@ -23,7 +23,7 @@ class DashboardController
     $id = $this->session->get('id');
     $currentUrl = $_SERVER['REQUEST_URI'];
 
-    // Obtener infomarcion del usuario
+    // Obtener información del usuario
     $user = User::getUserById($id, $this->db);
     // Obtener todos los miembros
     $members = Member::getAllMembers($this->db);
@@ -36,11 +36,14 @@ class DashboardController
     // Obtener los pagos no pagados
     $unpaid_payments = Payment::getUnpaidPayments($this->db);
 
+    $total_payments = $total_payments ?? 0;
+    $unpaid_payments = $unpaid_payments ?? 0;
+
     // Obtener las 2 primeras letras del nombre
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
     $avatar_fallback = $user->getInitials();
 
-    // Informacion ultimo incio de sesion
+    // Información último inicio de sesión
     $last_login_time = $this->session->get('last_login_time');
     $last_login_ip = $this->session->get('last_login_ip');
     $last_login_location = $this->session->get('last_login_location');
@@ -53,7 +56,6 @@ class DashboardController
     $createMessage = $this->session->get('create_success') ?? $this->session->get('create_error') ?? '';
     $this->session->remove('create_success');
     $this->session->remove('create_error');
-
 
     echo $this->twig->render('dashboard.twig', [
       'avatar' => $avatar_fallback,
@@ -91,6 +93,9 @@ class DashboardController
     $unpaid_payments = Payment::getUnpaidPayments($this->db);
     // Obtener los miembros que coinciden con la consulta de búsqueda
     $members = Member::searchByName($searchQuery, $this->db);
+
+    $total_payments = $total_payments ?? 0;
+    $unpaid_payments = $unpaid_payments ?? 0;
 
     // Obtener las 2 primeras letras del nombre
     $full_name = $user->getFirstName() . ' ' . $user->getLastName();
