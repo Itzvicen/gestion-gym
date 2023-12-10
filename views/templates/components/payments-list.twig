@@ -1,14 +1,14 @@
-<div class="flex items-center justify-between mb-2">
+<div class="flex md:flex-row flex-col items-center justify-between mb-2">
 	<div>
 		<h2 class="font-bold text-2xl">Pagos</h2>
 		<p class="text-gray-500 text-sm">Aquí puedes ver todos los pagos registrados en el sistema.</p>
 	</div>
-	<div class="flex gap-2">
+	<div class="flex md:flex-row flex-col gap-2 md:w-auto w-full md:mt-0 mt-4">
 		<button onclick="openModal()" class="px-4 py-2 text-sm font-medium text-white bg-black rounded-md">
 			Crear nuevo pago
 		</button>
 		<form method="get" action="/dashboard/payments/order">
-			<select name="by" class="px-5 py-2 text-sm font-medium text-gray-500 border rounded-md text-center" onchange="this.form.submit()">
+			<select name="by" class="px-5 py-2 text-sm font-medium text-gray-500 border rounded-md text-center md:w-auto w-full" onchange="this.form.submit()">
 				<option value="default">Ordenar por</option>
 				<option value="recent">Más recientes</option>
 				<option value="old">Más antiguos</option>

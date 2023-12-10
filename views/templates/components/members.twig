@@ -1,28 +1,28 @@
 <div class="">
 	{% if isSearching %}
-		<div class="flex items-center justify-between">
+		<div class="flex md:flex-row flex-col md:items-center justify-between md:w-auto w-full">
 			<div>
-				<h2 class="font-bold text-2xl">Miembros encontrados</h2>
+				<h2 class="font-bold text-2xl text-left">Miembros encontrados</h2>
 				<p class="text-gray-500 text-sm mb-2">Resultados de la búsqueda para "{{ searchQuery }}"</p>
 			</div>
-			<div>
-				<a href="/dashboard" class="px-4 py-2 text-sm font-medium text-white bg-black rounded-md">
+			<div class="my-2 md:my-0">
+				<a href="/dashboard" class="px-4 py-2 text-sm font-medium text-white bg-black rounded-md w-full">
 					Limpiar busqueda
 				</a>
 			</div>
 		</div>
 	{% else %}
-		<div class="flex items-center justify-between mb-2">
+		<div class="flex md:flex-row flex-col items-center justify-between mb-2">
 			<div>
 				<h2 class="font-bold text-2xl">Miembros registrados</h2>
 				<p class="text-gray-500 text-sm">Aquí puedes ver todos los miembros registrados en el sistema.</p>
 			</div>
-			<div class="flex gap-2">
+			<div class="flex md:flex-row flex-col gap-2 md:mt-0 mt-3 md:w-auto w-full">
 				<button onclick="openModal()" class="px-4 py-2 text-sm font-medium text-white bg-black rounded-md">
 					Añadir nuevo miembro
 				</button>
 				<form method="get" action="/dashboard/order">
-					<select name="by" class="px-5 py-2 text-sm font-medium text-gray-500 border rounded-md text-center" onchange="this.form.submit()">
+					<select name="by" class="px-5 py-2 text-sm font-medium text-gray-500 border rounded-md text-center md:w-auto w-full" onchange="this.form.submit()">
 						<option value="default">Ordenar por</option>
 						<option value="recent">Más recientes</option>
 						<option value="old">Más antiguos</option>
