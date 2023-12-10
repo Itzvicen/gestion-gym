@@ -30,10 +30,3 @@ function closeAddModal() {
   document.getElementById("add-modal").classList.add("hidden");
   document.body.classList.remove("overflow-hidden");
 }
-
-// Buscar miembros al pulsar enter
-document.getElementById('search').addEventListener('keyup', function(event) {
-  if (event.key === 'Enter') {
-      window.location.href = '/dashboard/search?query=' + encodeURIComponent(this.value);
-  }
-});
