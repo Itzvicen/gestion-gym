@@ -222,7 +222,8 @@ class Training
    *
    * @return int El número de filas afectadas
    */
-  public static function updateTraining($id, $class_name, $class_days, $class_duration, $class_time, $instructor, $location, $poster_image, $db) {
+  public static function updateTraining($id, $class_name, $class_days, $class_duration, $class_time, $instructor, $location, $poster_image, $db) 
+  {
     $db = $db->getConnection();
     $stmt = $db->prepare('UPDATE training_classes SET class_name = :class_name, class_days = :class_days, class_duration = :class_duration, class_time = :class_time, instructor = :instructor, location = :location, poster_image = :poster_image WHERE id = :id');
     $stmt->execute([

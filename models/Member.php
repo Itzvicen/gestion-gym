@@ -3,7 +3,7 @@
 /**
  * Clase Member
  *
- * Contiene métodos estáticos para realizar operaciones relacionadas con los miembros, como obtener miembros ordenados, crear, actualizar y eliminar miembros, 
+ * Contiene métodos estáticos para realizar operaciones relacionadas con los miembros, como obtener miembros ordenados, crear, actualizar y eliminar miembros,
  * buscar miembros por nombre, y obtener el número de miembros activos e inactivos.
  *
  */
