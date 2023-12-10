@@ -38,9 +38,15 @@
 					</div>
 
 					<div class="flex flex-col-reverse">
-						<dt class="text-xs font-medium text-gray-500">Fecha de registro</dt>
+						<dt class="text-xs font-medium text-gray-500">Días de clase</dt>
 						<dd class="text-sm text-gray-600">
-							<i class="fa-solid fa-calendar mr-1.5"></i>{{ training.getClassDate | date("d/m/Y") }}
+							<i class="fa-solid fa-calendar mr-1.5"></i>
+							{% set days = training.getClassDays|split(', ') %}
+							{% set initials = [] %}
+							{% for day in days %}
+								{% set initials = initials|merge([day|slice(0, 1)]) %}
+							{% endfor %}
+							{{ initials|join(', ') }}
 						</dd>
 					</div>
 				</dl>
