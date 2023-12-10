@@ -13,12 +13,11 @@ Además de las funcionalidades mencionadas anteriormente, el Sistema de Gestión
 
 Este sistema está diseñado para personas que administran un gimnasio, como recepcionistas, gerentes o propietarios de gimnasios. Proporciona una forma sencilla y eficiente de gestionar los miembros del gimnasio, sus pagos y las clases de entrenamiento. Con este sistema, puedes mantener toda la información de tu gimnasio organizada y accesible en un solo lugar.
 
-## Acceso al dashboard
+## 🔐 Acceso al dashboard
 
 Para acceder al dashboard de la aplicación, puedes utilizar las siguientes credenciales:
 
-🔐 Credenciales
-
+Credenciales
 - Usuario: admin
 - Contraseña: 12345
 
