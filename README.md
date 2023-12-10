@@ -9,7 +9,7 @@ Además de las funcionalidades mencionadas anteriormente, el Sistema de Gestión
 - Lenguajes: PHP, Twig
 - Base de datos: MySQL
 
-## Funciones del Administrador
+## Funciones del administrador
 
 El administrador tiene las siguientes capacidades:
 
@@ -17,7 +17,7 @@ El administrador tiene las siguientes capacidades:
 - **Pagos**: Puede gestionar el historial de pagos, incluyendo la adición de nuevos pagos y la actualización del estado de los pagos.
 - **Clases de entrenamiento**: Puede crear, editar y eliminar clases de entrenamiento.
 
-## Uso Local del Proyecto
+## Uso local del proyecto
 
 Para poner en marcha el proyecto localmente, sigue estos pasos:
 
