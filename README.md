@@ -9,10 +9,20 @@ El Sistema de Gestión de Miembros de Gimnasio es una aplicación que permite ad
 
 Además de las funcionalidades mencionadas anteriormente, el Sistema de Gestión de Miembros de Gimnasio también permitirá consultar los diferentes pagos mensuales de cada miembro, brindando un registro detallado de los pagos realizados, los métodos de pago utilizados y el estado de los pagos.
 
-## 🔐 Credenciales
+## ¿Para quién está diseñado este sistema?
+
+Este sistema está diseñado para personas que administran un gimnasio, como recepcionistas, gerentes o propietarios de gimnasios. Proporciona una forma sencilla y eficiente de gestionar los miembros del gimnasio, sus pagos y las clases de entrenamiento. Con este sistema, puedes mantener toda la información de tu gimnasio organizada y accesible en un solo lugar.
+
+## Acceso al dashboard
+
+Para acceder al dashboard de la aplicación, puedes utilizar las siguientes credenciales:
+
+🔐 Credenciales
 
 - Usuario: admin
 - Contraseña: 12345
+
+Una vez que hayas iniciado sesión, tendrás acceso a todas las funcionalidades de administración de miembros del gimnasio.
 
 ## 🛠️ Tecnologías utilizadas
 
